@@ -1,5 +1,5 @@
 
-module router_block4
+module router_block2
     import router_pkg::*;
 #(
     parameter router_type rtype = CORNERNE,
@@ -16,7 +16,7 @@ module router_block4
     input logic dx,
     input logic dy,
 
-    output logic [1:0] toDemux
+    output logic toDemux
 //
     //output logic outputNS,
     //output logic outputWE,
@@ -46,16 +46,10 @@ always_comb begin : grants
     end
 
     if(eqx == 1'b1 && eqy == 1'b1) begin
-        toDemux = 2'b00;
-    end
-    else if (eqx == 1'b1 && eqy == 1'b0) begin
-        toDemux = 2'b01;
-    end
-    else if (eqx == 1'b0 && eqy == 1'b1) begin
-        toDemux = 2'b10;
+        toDemux = 1'b0;
     end
     else begin
-        toDemux = 2'b11;
+        toDemux = 1'b1;
     end
 end
     

@@ -45,8 +45,26 @@ CornerSW:
 
 endpackage;
 
-interface inputPort(parameter WIDTH = 32);
+
+interface RTPort #(parameter WIDTH = 32);
     logic req;
     logic ack;
-    lo
-endinterface //inputPort
+    logic [WIDTH-1:0] data;
+
+    // Define the input and output ports
+    modport Input (
+        input req, data,
+        output ack
+    );
+
+    // Define the output and input ports
+    modport Output (
+        output req, data,
+        input ack
+    );
+
+    // Assignments to actual signals
+    //assign ack = ack;
+    //assign req = req;
+    //assign data = data;
+endinterface; //inputPort
