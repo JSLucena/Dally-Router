@@ -84,7 +84,7 @@ architecture Behavioral of demux4 is
     end component;
     signal D0_ack,D0S_ack,D1_req,D2_req,D1S_req,D2s_req,D1_ack,D2_ack,D1S_ack,D2s_ack,B_req_out,B_ack_out,C_req_out,C_ack_out,D_req_out,D_ack_out,E_req_out,E_ack_out,D1S_data,D2S_data : std_logic;
     signal D1_data,D2_data,B_data_out,C_data_out,D_data_out,E_data_out : std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal crap,crap2,crap3:std_logic_vector(DATA_WIDTH-1 downto 1);
+    signal crap,crap2,crap3:std_logic_vector(DATA_WIDTH-1 downto 0);
 begin
 inA_ack<= D0_ack;
 Demux_0 : demux port map(rst,inA_req ,inA_data ,D0_ack,inSel_req,D0S_ack,selector(1),D1_req,D1_data,D1_ack,D2_req,D2_data,D2_ack);
@@ -114,18 +114,21 @@ Demux_2 : demux port map(rst=>rst,
                          outC_req => E_req_out,
                          outC_data => E_data_out,
                          outC_ack => E_ack_out);
-Demux_3 :demux port map(rst=>rst,
+    Demux_3 :demux port map(rst=>rst,
                          inA_req => inSel_req ,
-                         inA_data => crap&selector(0),
+                         inA_data => crap,
                          inA_ack => inSel_ack,
                          inSel_req => inSel_req,
                          inSel_ack => inSel_ack,
                          selector => selector(1),
                          outB_req => D1S_req,
-                         outB_data => crap2&D1S_data,
+                         outB_data => crap2,
                          outB_ack => D1S_ack,
                          outC_req => D2S_req,
-                         outC_data => crap2&D2S_data,
+                         outC_data => crap3,
                          outC_ack => D2S_ack);
-
+crap(0) <= selector(0);
+D1S_data <= crap2(0);
+D2S_data <= crap3(0);
 end Behavioral;
+
