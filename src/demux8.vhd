@@ -41,7 +41,7 @@ port(
     -- Select port 
     inSel_req     : in  std_logic;
     inSel_ack     : out std_logic;
-    selector      : in std_logic_vector(1 downto 0);
+    selector      : in std_logic_vector(2 downto 0);
     -- Output channel 1
     outB_req      : out std_logic;
     outB_data     : out std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -99,11 +99,12 @@ architecture Behavioral of demux8 is
         outC_ack      : in  std_logic
         );
     end component;
-    signal D0_ack,D0S_ack,D1_req,D1S_req,D1_ack,D1S_ack,D1S_data,D2_req,D2S_req,D2_ack,D2S_ack,D2S_data : std_logic;
+    signal D0_ack,D0S_ack,D1_req,D1S_req,D1_ack,D1S_ack,D2_req,D2S_req,D2_ack,D2S_ack : std_logic;
     signal D1_data,D2_data,D3_data,D4_data,D5_data,D6_data,B_data_out,C_data_out,D_data_out,E_data_out,F_data_out,G_data_out,H_data_out,I_data_out : std_logic_vector(DATA_WIDTH-1 downto 0);
     signal D3_req,D3S_req,D3_ack,D3S_ack,D3S_data,D4_req,D4S_req,D4_ack,D4S_ack,D4S_data,D5_req,D5S_req,D5_ack,D5S_ack,D5S_data,D6_req,D6S_req,D6_ack,D6S_ack,D6S_data: std_logic;
-    signal B_req_out,B_ack_out :std_logic;
+    signal B_req_out,B_ack_out,C_req_out,C_ack_out,D_req_out,D_ack_out,E_req_out,E_ack_out,F_req_out,F_ack_out,G_req_out,G_ack_out,H_req_out,H_ack_out,I_req_out,I_ack_out :std_logic;
     signal crap,crap2,crap3:std_logic_vector(DATA_WIDTH-1 downto 0);
+    signal D1S_data,D2S_data : std_logic_vector(1 downto 0);
 begin
     inA_ack<= D0_ack;
     Demux_0 : demux port map(rst,inA_req ,inA_data ,D0_ack,inSel_req,D0S_ack,selector(1),D1_req,D1_data,D1_ack,D2_req,D2_data,D2_ack);
@@ -113,7 +114,7 @@ begin
                          inA_ack => D1_ack,
                          inSel_req => D1S_req,
                          inSel_ack => D1S_ack,
-                         selector => D1S_data,
+                         selector => D1S_data(1),
                          outB_req => D3_req,
                          outB_data => D3_data,
                          outB_ack => D3_ack,
@@ -126,7 +127,7 @@ begin
                          inA_ack => D2_ack,
                          inSel_req => D2S_req,
                          inSel_ack => D2S_ack,
-                         selector => D2S_data,
+                         selector => D2S_data(1),
                          outB_req => D5_req,
                          outB_data => D5_data,
                          outB_ack => D5_ack,
@@ -140,12 +141,12 @@ begin
                          inSel_req => D3S_req,
                          inSel_ack => D3S_ack,
                          selector => D3S_data,
-                         outB_req => D_req_out,
-                         outB_data => D_data_out,
-                         outB_ack => D_ack_out,
-                         outC_req => E_req_out,
-                         outC_data => E_data_out,
-                         outC_ack => E_ack_out);    
+                         outB_req => B_req_out,
+                         outB_data => B_data_out,
+                         outB_ack => B_ack_out,
+                         outC_req => C_req_out,
+                         outC_data => C_data_out,
+                         outC_ack => C_ack_out);    
     Demux_4 : demux port map(rst=>rst,
                          inA_req => D4_req ,
                          inA_data => D4_data ,
@@ -166,12 +167,12 @@ begin
                          inSel_req => D5S_req,
                          inSel_ack => D5S_ack,
                          selector => D5S_data,
-                         outB_req => D_req_out,
-                         outB_data => D_data_out,
-                         outB_ack => D_ack_out,
-                         outC_req => E_req_out,
-                         outC_data => E_data_out,
-                         outC_ack => E_ack_out);       
+                         outB_req => F_req_out,
+                         outB_data => F_data_out,
+                         outB_ack => F_ack_out,
+                         outC_req => G_req_out,
+                         outC_data => G_data_out,
+                         outC_ack => G_ack_out);       
     Demux_6 : demux port map(rst=>rst,
                          inA_req => D5_req ,
                          inA_data => D5_data ,
@@ -179,26 +180,54 @@ begin
                          inSel_req => D5S_req,
                          inSel_ack => D5S_ack,
                          selector => D5S_data,
-                         outB_req => D_req_out,
-                         outB_data => D_data_out,
-                         outB_ack => D_ack_out,
-                         outC_req => E_req_out,
-                         outC_data => E_data_out,
-                         outC_ack => E_ack_out);                 
-    Demux_x :demux port map(rst=>rst,
+                         outB_req => H_req_out,
+                         outB_data => H_data_out,
+                         outB_ack => H_ack_out,
+                         outC_req => I_req_out,
+                         outC_data => I_data_out,
+                         outC_ack => I_ack_out);                 
+    Demux_S0 :demux port map(rst=>rst,
                          inA_req => inSel_req ,
                          inA_data => crap,
                          inA_ack => inSel_ack,
                          inSel_req => inSel_req,
                          inSel_ack => inSel_ack,
-                         selector => selector(1),
+                         selector => selector(2),
                          outB_req => D1S_req,
                          outB_data => crap2,
                          outB_ack => D1S_ack,
                          outC_req => D2S_req,
                          outC_data => crap3,
                          outC_ack => D2S_ack);
+                         
+    Demux_S1 :demux port map(rst=>rst,
+                         inA_req => inSel_req ,
+                         inA_data => crap,
+                         inA_ack => inSel_ack,
+                         inSel_req => inSel_req,
+                         inSel_ack => inSel_ack,
+                         selector => selector(2),
+                         outB_req => D1S_req,
+                         outB_data => crap2,
+                         outB_ack => D1S_ack,
+                         outC_req => D2S_req,
+                         outC_data => crap3,
+                         outC_ack => D2S_ack);
+ 
+    Demux_S2 :demux port map(rst=>rst,
+                         inA_req => inSel_req ,
+                         inA_data => crap,
+                         inA_ack => inSel_ack,
+                         inSel_req => inSel_req,
+                         inSel_ack => inSel_ack,
+                         selector => selector(2),
+                         outB_req => D1S_req,
+                         outB_data => crap2,
+                         outB_ack => D1S_ack,
+                         outC_req => D2S_req,
+                         outC_data => crap3,
+                         outC_ack => D2S_ack);                         
 crap(0) <= selector(0);
-D1S_data <= crap2(0);
-D2S_data <= crap3(0);
+D1S_data <= crap2(1 downto 0);
+D2S_data <= crap3(1 downto 0);
 end Behavioral;
