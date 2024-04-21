@@ -46,7 +46,7 @@ arbiter#() arbiterAB(
     .inB_data   (inB_data),
     .inB_req    (inB_req),
 
-    .outC_ack    (in1_req),
+    .outC_ack    (in1_ack),
     .outC_data   (in1_data),
     .outC_req    (in1_req)
 );
@@ -61,7 +61,7 @@ arbiter#() arbiterCD(
     .inB_data   (inD_data),
     .inB_req    (inD_req),
 
-    .outC_ack    (in2_req),
+    .outC_ack    (in2_ack),
     .outC_data   (in2_data),
     .outC_req    (in2_req)
 );
@@ -76,7 +76,7 @@ arbiter#() arbiter12(
     .inB_data   (in2_data),
     .inB_req    (in2_req),
 
-    .outC_ack    (out_req),
+    .outC_ack    (out_ack),
     .outC_data   (out_data),
     .outC_req    (out_req)
 );

@@ -13,8 +13,8 @@ module Corner_Router
     //Global
     input logic rst,
     //Interfaces
-    RTPort.Input proc_input,
-    RTPort.Output proc_output,
+    RTPort.Input proc_input ,
+    RTPort.Output proc_output ,
     RTPort.Input port1_input,
     RTPort.Output port1_output,
     RTPort.Input port2_input,
@@ -68,7 +68,7 @@ module Corner_Router
 logic [1:0] toDemux;
 
 // Requests between click and routers
-logic req_click_router_self;
+bit req_click_router_self;
 logic fork_to_a_req;
 logic fork_to_a_ack;
 logic fork_to_sel_req;
@@ -118,9 +118,9 @@ logic req2;
 logic ack2;
 logic req3;
 logic ack3;
-logic unused_req = 1'b0;
-logic unused_ack = 1'b0;
-logic [n-1:0] unused_databus =  {(n){1'b0}};
+logic unused_req; 
+logic unused_ack;
+logic [n-1:0] unused_databus;
 logic unused_req2 = 1'b0;
 logic unused_ack2 = 1'b0;
 logic [n-1:0] unused_databus2 =  {(n){1'b0}};
@@ -152,7 +152,7 @@ router_block4 #(
 );
 
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqLocaltoOther(
     .d      (fork_to_sel_req),
     .z      (sel_req_delay_o)
@@ -163,22 +163,23 @@ demux4 #() demuxLocaltoOther
     .rst        (rst),
     .inA_req    (fork_to_a_req),
     .inA_ack    (fork_to_a_ack),
+    .inA_data   (data_self),
 
     .inSel_req   (sel_req_delay_o),
     .inSel_ack   (fork_to_sel_ack),
     .selector    (toDemux),
 
-    .outB_req    (port1_output.req),
-    .outB_ack    (port1_output.ack),
-    .outB_data   (port1_output.data),
+    .outD_req    (port1_output.req),
+    .outD_ack    (port1_output.ack),
+    .outD_data   (port1_output.data),
 
     .outC_req    (port2_output.req),
     .outC_ack    (port2_output.ack),
     .outC_data   (port2_output.data),
 
-    .outD_req    (port3_output.req),
-    .outD_ack    (port3_output.ack),
-    .outD_data   (port3_output.data),
+    .outB_req    (port3_output.req),
+    .outB_ack    (port3_output.ack),
+    .outB_data   (port3_output.data),
 
     .outE_req    (unused_req),
     .outE_ack    (unused_ack),
@@ -234,10 +235,12 @@ arbiter4 #() proc_arbiter
 
 // Input latches
 click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) click1
+    .DATA_WIDTH     (n)
+   // .VALUE          (0),
+  //  .PHASE_INIT     (1'b0)
+    ) click1
     (
+    .rst            (rst),
     .in_ack         (port1_input.ack),
     .in_req         (port1_input.req),
     .in_data        (port1_input.data),
@@ -251,10 +254,12 @@ click_element #(
 
 
 click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) click2
+    .DATA_WIDTH     (n)
+  //  .VALUE          (0),
+  //  .PHASE_INIT     (1'b0)
+    ) click2
     (
+    .rst            (rst),
     .in_ack         (port2_input.ack),
     .in_req         (port2_input.req),
     .in_data        (port2_input.data),
@@ -265,10 +270,12 @@ click_element #(
 
 );
 click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) click3
+    .DATA_WIDTH     (n)
+ //   .VALUE          (0),
+ //   .PHASE_INIT     (1'b0)
+    ) click3
     (
+    .rst            (rst),
     .in_ack         (port3_input.ack),
     .in_req         (port3_input.req),
     .in_data        (port3_input.data),
@@ -278,11 +285,16 @@ click_element #(
     .out_data       (data_3)
 
 );
+
+
+
 click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) clickself
+    .DATA_WIDTH     (n)
+  //  .VALUE          (0),
+   // .PHASE_INIT     (0)
+    ) clickself
     (
+    .rst            (rst),
     .in_ack         (proc_input.ack), //OK
     .in_req         (proc_input.req), //OK
     .in_data        (proc_input.data), //OK
@@ -290,10 +302,11 @@ click_element #(
     .out_req        (req_click_router_self), //OK
     .out_ack        (ack_proc_click), //OK
     .out_data       (data_self) //OK
-
-// Routers
-
 );
+
+
+
+
 
 fork_component #() click_fork
 (

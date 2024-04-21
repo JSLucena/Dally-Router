@@ -1,8 +1,10 @@
 module corner_tb
 import router_pkg::*;
 #(
-parameter n = 36
+parameter n = 32
 )();
+
+
 
 
 
@@ -41,8 +43,8 @@ parameter n = 36
     logic port3_output_ack;
     logic port3_output_req;
 
-    RTPort proc_i ();
-    RTPort proc_o ();
+    RTPort proc_in ();
+    RTPort proc_out ();
     RTPort port1_in ();
     RTPort port1_out ();
     RTPort port2_in ();
@@ -73,12 +75,51 @@ parameter n = 36
 
 
 );
+
+always_comb
+    if(rst == 1'b1) begin
+    
+        proc_in.ack = 1'b0;
+        proc_in.req = 1'b0;
+        proc_in.data = '0;
+        proc_out.ack = 1'b0;
+        proc_out.req = 1'b0;
+        proc_out.data = '0;
+        
+        port1_in.ack = 1'b0;
+        port1_in.req = 1'b0;
+        port1_in.data = '0;
+        port1_out.ack = 1'b0;
+        port1_out.req = 1'b0;
+        port1_out.data = '0;
+        
+        port2_in.ack = 1'b0;
+        port2_in.req = 1'b0;
+        port2_in.data = '0;
+        port2_out.ack = 1'b0;
+        port2_out.req = 1'b0;
+        port2_out.data = '0;
+        
+        port3_in.ack = 1'b0;
+        port3_in.req = 1'b0;
+        port3_in.data = '0;
+        port3_out.ack = 1'b0;
+        port3_out.req = 1'b0;
+        port3_out.data = '0;
+    
+    end
+
+ 
+
 logic [1:0] destination = 2'b01;
 logic [1:0] deltas = 2'b0;
 initial begin
+    rst = 1'b1;
+    #200;
     repeat (10) begin // Generate 10 cycles of data
+        rst = 1'b0;
         #50; // Wait for 10 time units
-        proc_in.req = 1; // Assert req signal
+        
         if(destination == 2'b00) begin
             destination += 1;
         end
@@ -98,53 +139,118 @@ initial begin
 
         // 2 bits of address, destination in this case is x= 0, y = 0.
         // 2 bits to represent destination, x is higher and y is higher
-        proc_in.data = {destination,deltas,32'hFFFFFFFF}; 
+        proc_in.data = {destination,deltas,28'hFFFFFFF}; 
+        proc_in.req = ~proc_in.req; // Assert req signal
         destination += 1'b1;
-
-    end
-
-    repeat (2) begin
-        #20;
-        port1_in.data = {2'b00,2'b10,32'hEEEEEEEE};
-        port1_in.req = 1'b1;
-
-        #20;
-        port2_in.data = {2'b00,2'b01,32'hDDDDDDDD};
-        port2_in.req = 1'b1;
-
-        port3_in.data = {2'b00,2'b11,32'hCCCCCCCC};
-        port3_in.req = 1'b1;
-
+   
+        @(proc_in.ack);
+        
     end
 end
 
-always @(posedge proc_in.ack) begin
-        proc_in.req = 1'b0;
+initial begin
+    #200;
+    repeat (2) begin
+        #30;
+        port1_in.data = {2'b00,2'b10,28'hEEEEEEE};
+        port1_in.req = ~port1_in.req ;
+        
+        @(port1_in.ack);
+        port1_in.data = {2'b00,2'b10,28'hAAAAAAA};
+        port1_in.req = ~port1_in.req ;
+        
+    end
+end
+
+initial begin
+    #200;
+    repeat (2) begin
+        #40;
+        port2_in.data = {2'b00,2'b01,28'hDDDDDDD};
+        port2_in.req = ~port2_in.req;
+        
+         @(port2_in.ack);
+/*
+        port3_in.data = {2'b00,2'b11,28'hCCCCCCC};
+        port3_in.req = ~port3_in.req;
+*/
+    end
+end
+
+    always @( proc_out.req) begin
+            if(rst == 0) begin
+            #10;
+            proc_out.ack = ~proc_out.ack;
+            end
+        end
+    
+    always @(port1_out.req) begin
+            if(rst == 0) begin
+            #10;
+            port1_out.ack = ~port1_out.ack ;
+            end
+        end
+    
+    always @(port2_out.req) begin
+            if(rst == 0) begin
+            #10;
+            port2_out.ack = ~port2_out.ack ;
+            end
+        end
+    
+    always @(port3_out.req) begin
+            if(rst == 0) begin
+            #10;
+            port3_out.ack = ~port3_out.ack ;
+            end
+        end
+
+
+
+
+
+
+always @(proc_in.ack) begin
+        #10;
+        if(rst == 0) begin
+        proc_in.req = ~proc_in.req;
+        end
     end
 
-always @(posedge port1_in.ack) begin
-        port1_in.req = 1'b0;
+always @(port1_in.ack) begin
+        #10;
+        if(rst == 0) begin
+        port1_in.req = ~port1_in.req;
+        end
     end
 
-always @(posedge port2_in.ack) begin
-        port2_in.req = 1'b0;
+always @(port2_in.ack) begin
+        if(rst == 0) begin
+        #10;
+        port2_in.req = ~port2_in.req;
+        end
     end
 
-always @(posedge port3_in.ack) begin
-        port3_in.req = 1'b0;
+always @(port3_in.ack) begin
+        if(rst == 0) begin
+        #10;
+        port3_in.req = ~port3_in.req;
+        end
     end
 
-always @(posedge port3_out.req) begin
+always @( port3_out.req) begin
         $display("Port3 data: %h", port3_out.data);
     end
 
-always @(posedge port2_out.req) begin
+always @(port2_out.req) begin
         $display("Port2 data: %h", port2_out.data);
     end
 
-always @(posedge port1_out.req) begin
+always @(port1_out.req) begin
         $display("Port1 data: %h", port1_out.data);
     end
 
-
+always @(proc_out.req ) begin
+        $display("Proc data: %h", proc_out.data);
+    end
 endmodule
