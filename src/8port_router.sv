@@ -32,11 +32,11 @@ module full_router
     RTPort.Input portSW_input,
     RTPort.Output porSW_output,
     RTPort.Input portSE_input,
-    RTPort.Output portSE_output,
+    RTPort.Output portSE_output
 
 );
 
-logic [1:0] toDemux;
+logic [2:0] toDemux;
 
 // Requests between click and routers
 logic req_click_router_self;
@@ -132,13 +132,13 @@ fork_component #() clickN_fork
 
 );
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqNtoOther(
     .d      (forkN_to_sel_req),
     .z      (selectN_req_delay)
 );
 
-router_block4 #(
+router_block2 #(
 
     .rtype      (rtype),
     .maxx      (maxx),
@@ -169,9 +169,9 @@ demux #() demux_north_input
     .inSel_ack   (forkN_to_sel_ack),
     .selector    (to_demux_N),
 
-    .outB_req    (proc_output.req),
-    .outB_ack    (proc_output.ack),
-    .outB_data   (proc_output.data),
+    .outB_req    (req_N_local),
+    .outB_ack    (ack_N_local),
+    .outB_data   (data_N_local),
 
     .outC_req    (req_north_south),
     .outC_ack    (ack_north_south),
@@ -236,7 +236,7 @@ fork_component #() clickS_fork
 
 );
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqStoOther(
     .d      (forkS_to_sel_req),
     .z      (selectS_req_delay)
@@ -273,9 +273,9 @@ demux #() demux_south_input
     .inSel_ack   (forkS_to_sel_ack),
     .selector    (to_demux_S),
 
-    .outB_req    (proc_output.req),
-    .outB_ack    (proc_output.ack),
-    .outB_data   (proc_output.data),
+    .outB_req    (req_S_local),
+    .outB_ack    (ack_S_local),
+    .outB_data   (data_S_local),
 
     .outC_req    (req_south_north),
     .outC_ack    (ack_south_north),
@@ -336,7 +336,7 @@ fork_component #() clickW_fork
 
 );
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqWtoOther(
     .d      (forkW_to_sel_req),
     .z      (selectW_req_delay)
@@ -373,9 +373,9 @@ demux #() demux_west_input
     .inSel_ack   (forkW_to_sel_ack),
     .selector    (to_demux_W),
 
-    .outB_req    (proc_output.req),
-    .outB_ack    (proc_output.ack),
-    .outB_data   (proc_output.data),
+    .outB_req    (req_W_local),
+    .outB_ack    (ack_W_local),
+    .outB_data   (data_W_local),
 
     .outC_req    (req_west_east),
     .outC_ack    (ack_west_east),
@@ -438,7 +438,7 @@ fork_component #() clickE_fork
 
 );
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqEtoOther(
     .d      (forkE_to_sel_req),
     .z      (selectE_req_delay)
@@ -475,9 +475,9 @@ demux #() demux_east_input
     .inSel_ack   (forkE_to_sel_ack),
     .selector    (to_demux_E),
 
-    .outB_req    (proc_output.req),
-    .outB_ack    (proc_output.ack),
-    .outB_data   (proc_output.data),
+    .outB_req    (req_E_local),
+    .outB_ack    (ack_E_local),
+    .outB_data   (data_E_local),
 
     .outC_req    (req_east_west),
     .outC_ack    (ack_east_west),
@@ -539,7 +539,7 @@ fork_component #() clickNW_fork
 
 );
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqNWtoOther(
     .d      (forkNW_to_sel_req),
     .z      (selectNW_req_delay)
@@ -576,9 +576,9 @@ demux4 #() demux_northwest_input
     .inSel_ack   (forkNW_to_sel_ack),
     .selector    (to_demux_NW),
 
-    .outB_req    (proc_output.req),
-    .outB_ack    (proc_output.ack),
-    .outB_data   (proc_output.data),
+    .outB_req    (req_NW_local),
+    .outB_ack    (ack_NW_local),
+    .outB_data   (data_NW_local),
 
     .outC_req    (req_northwest_south),
     .outC_ack    (ack_northwest_south),
@@ -603,26 +603,329 @@ logic reqNE;
 logic ackNE;
 logic [n-1:0] data_NE;
 
+logic [maxx-1:0] dst_xNE;
+logic [maxy-1:0] dst_yNE;
+logic deltaxNE;
+logic deltayNE;
+
+logic [1:0] to_demux_NE;
+
+assign dst_yNE = data_NE[n-maxx-2:n-maxx-2-maxy-1];
+assign dst_xNE = data_NE[n-1:n-maxx-1];
+assign deltaxNE = data_NE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+assign deltayNE = data_NE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+
+logic forkNE_to_a_req;
+logic forkNE_to_a_ack;
+logic forkNE_to_sel_req;
+logic forkNE_to_sel_ack;
+logic selectNE_req_delay;
+
+click_element #(
+    .DATA_WIDTH     (n),
+    .VALUE          (0),
+    .PHASE_INIT     (1'b0)) clickNE
+    (
+    .in_ack         (portNE_input.ack),
+    .in_req         (portNE_input.req),
+    .in_data        (portNE_input.data),
+
+    .out_req        (req_NE),
+    .out_ack        (ack_NE),
+    .out_data       (data_NE)
+
+);
+
+fork_component #() clickNE_fork
+(
+    .rst        (rst),
+    .inA_ack    (ack_NE),
+    .inA_req    (req_NE),
+
+    .outB_ack   (forkNE_to_a_ack),
+    .outB_req   (forkNE_to_a_req),
+    .outC_ack   (forkNE_to_sel_ack),
+    .outC_req   (forkNE_to_sel_req)
+
+);
+delay_element #(
+    .size   (20)
+) delayReqNEtoOther(
+    .d      (forkNE_to_sel_req),
+    .z      (selectNE_req_delay)
+);
+
+router_block4 #(
+
+    .rtype      (rtype),
+    .maxx      (maxx),
+    .maxy      (maxy),
+    .selfy      (srcy),
+    .selfx      (srcx)
+
+)router_northeast
+(
+
+
+    .dst_x      (dst_xNE),
+    .dst_y      (dst_yNE),
+    .dx         (delta_xNE),
+    .dy         (delta_yNE),
+    .toDemux    (to_demux_NE)
+
+    
+);
+
+demux4 #() demux_northeast_input
+(
+    .rst        (rst),
+    .inA_req    (forkNE_to_a_req),
+    .inA_ack    (forkNE_to_a_ack),
+
+    .inSel_req   (selectNE_req_delay),
+    .inSel_ack   (forkNE_to_sel_ack),
+    .selector    (to_demux_NE),
+
+    .outB_req    (req_NE_local),
+    .outB_ack    (ack_NE_local),
+    .outB_data   (data_NE_local),
+
+    .outC_req    (req_northeast_south),
+    .outC_ack    (ack_northeast_south),
+    .outC_data   (data_northeast_south),
+
+    .outD_req    (req_northeast_west),
+    .outD_ack    (ack_northeast_west),
+    .outD_data   (data_northeast_west),
+
+    .outE_req    (req_northeast_southwest),
+    .outE_ack    (ack_northeast_southwest),
+    .outE_data   (data_northeast_southwest)
+
+);
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
 //Signals from Southwest input
 logic reqSW;
 logic ackSW;
 logic [n-1:0] data_SW;
+
+logic [maxx-1:0] dst_xSW;
+logic [maxy-1:0] dst_ySW;
+logic deltaxSW;
+logic deltaySW;
+
+logic [1:0] to_demux_SW;
+
+assign dst_ySW = data_SW[n-maxx-2:n-maxx-2-maxy-1];
+assign dst_xSW = data_SW[n-1:n-maxx-1];
+assign deltaxSW = data_SW[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+assign deltaySW = data_SW[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+
+logic forkSW_to_a_req;
+logic forkSW_to_a_ack;
+logic forkSW_to_sel_req;
+logic forkSW_to_sel_ack;
+logic selectSW_req_delay;
+
+click_element #(
+    .DATA_WIDTH     (n),
+    .VALUE          (0),
+    .PHASE_INIT     (1'b0)) clickSW
+    (
+    .in_ack         (portSW_input.ack),
+    .in_req         (portSW_input.req),
+    .in_data        (portSW_input.data),
+
+    .out_req        (req_SW),
+    .out_ack        (ack_SW),
+    .out_data       (data_SW)
+
+);
+
+fork_component #() clickSW_fork
+(
+    .rst        (rst),
+    .inA_ack    (ack_SW),
+    .inA_req    (req_SW),
+
+    .outB_ack   (forkSW_to_a_ack),
+    .outB_req   (forkSW_to_a_req),
+    .outC_ack   (forkSW_to_sel_ack),
+    .outC_req   (forkSW_to_sel_req)
+
+);
+delay_element #(
+    .size   (20)
+) delayReqSWtoOther(
+    .d      (forkSW_to_sel_req),
+    .z      (selectSW_req_delay)
+);
+
+router_block4 #(
+
+    .rtype      (rtype),
+    .maxx      (maxx),
+    .maxy      (maxy),
+    .selfy      (srcy),
+    .selfx      (srcx)
+
+)router_southwest
+(
+
+
+    .dst_x      (dst_xSW),
+    .dst_y      (dst_ySW),
+    .dx         (delta_xSW),
+    .dy         (delta_ySW),
+    .toDemux    (to_demux_SW)
+
+    
+);
+
+demux4 #() demux_southwest_input
+(
+    .rst        (rst),
+    .inA_req    (forkSW_to_a_req),
+    .inA_ack    (forkSW_to_a_ack),
+
+    .inSel_req   (selectSW_req_delay),
+    .inSel_ack   (forkSW_to_sel_ack),
+    .selector    (to_demux_SW),
+
+    .outB_req    (req_SW_local),
+    .outB_ack    (ack_SW_local),
+    .outB_data   (data_SW_local),
+
+    .outC_req    (req_southwest_north),
+    .outC_ack    (ack_southwest_north),
+    .outC_data   (data_southwest_north),
+
+    .outD_req    (req_southwest_east),
+    .outD_ack    (ack_southwest_east),
+    .outD_data   (data_southwest_east),
+
+    .outE_req    (req_southwest_northeast),
+    .outE_ack    (ack_southwest_northeast),
+    .outE_data   (data_southwest_northeast)
+
+);
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 
 //Signals from Southeast input
 logic reqSE;
 logic ackSE;
 logic [n-1:0] data_SE;
 
-//logic unused_req = 1'b0;
-//logic unused_ack = 1'b0;
-//logic [n-1:0] unused_databus =  {(n){1'b0}};
-//logic unused_req2 = 1'b0;
-//logic unused_ack2 = 1'b0;
-//logic [n-1:0] unused_databus2 =  {(n){1'b0}};
+logic [maxx-1:0] dst_xSE;
+logic [maxy-1:0] dst_ySE;
+logic deltaxSE;
+logic deltaySE;
 
-//logic out_req;
-//logic out_ack;
-//logic [n-1:0] out_data;
+logic [1:0] to_demux_SE;
+
+assign dst_ySE = data_SE[n-maxx-2:n-maxx-2-maxy-1];
+assign dst_xSE = data_SE[n-1:n-maxx-1];
+assign deltaxSE = data_SE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+assign deltaySE = data_SE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+
+logic forkSE_to_a_req;
+logic forkSE_to_a_ack;
+logic forkSE_to_sel_req;
+logic forkSE_to_sel_ack;
+logic selectSE_req_delay;
+
+click_element #(
+    .DATA_WIDTH     (n),
+    .VALUE          (0),
+    .PHASE_INIT     (1'b0)) clickSE
+    (
+    .in_ack         (portSE_input.ack),
+    .in_req         (portSE_input.req),
+    .in_data        (portSE_input.data),
+
+    .out_req        (req_SE),
+    .out_ack        (ack_SE),
+    .out_data       (data_SE)
+
+);
+
+fork_component #() clickSE_fork
+(
+    .rst        (rst),
+    .inA_ack    (ack_SE),
+    .inA_req    (req_SE),
+
+    .outB_ack   (forkSE_to_a_ack),
+    .outB_req   (forkSE_to_a_req),
+    .outC_ack   (forkSE_to_sel_ack),
+    .outC_req   (forkSE_to_sel_req)
+
+);
+delay_element #(
+    .size   (20)
+) delayReqSEtoOther(
+    .d      (forkSE_to_sel_req),
+    .z      (selectSE_req_delay)
+);
+
+router_block4 #(
+
+    .rtype      (rtype),
+    .maxx      (maxx),
+    .maxy      (maxy),
+    .selfy      (srcy),
+    .selfx      (srcx)
+
+)router_southeast
+(
+
+
+    .dst_x      (dst_xSE),
+    .dst_y      (dst_ySE),
+    .dx         (delta_xSE),
+    .dy         (delta_ySE),
+    .toDemux    (to_demux_SE)
+
+    
+);
+
+demux4 #() demux_southeast_input
+(
+    .rst        (rst),
+    .inA_req    (forkSE_to_a_req),
+    .inA_ack    (forkSE_to_a_ack),
+
+    .inSel_req   (selectSE_req_delay),
+    .inSel_ack   (forkSE_to_sel_ack),
+    .selector    (to_demux_SE),
+
+    .outB_req    (req_SE_local),
+    .outB_ack    (ack_SE_local),
+    .outB_data   (data_SE_local),
+
+    .outC_req    (req_southeast_north),
+    .outC_ack    (ack_southeast_north),
+    .outC_data   (data_southeast_north),
+
+    .outD_req    (req_southeast_west),
+    .outD_ack    (ack_southeast_west),
+    .outD_data   (data_southeast_west),
+
+    .outE_req    (req_southeast_northwest),
+    .outE_ack    (ack_southeast_northwest),
+    .outE_data   (data_southeast_northwest)
+
+);
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
+
 
 ///Outputs
 
@@ -707,8 +1010,8 @@ arbiter4 #() south_arbiter
     .inC_ack    (ack_northeast_south),
     
     .inD_req    (req_local_S),
-    .inD_data   (ack_local_S),
-    .inD_ack    (data_local_S),
+    .inD_data   (data_local_S),
+    .inD_ack    (ack_local_S),
     
     .out_req    (portS_output.req),
     .out_data   (portS_output.data),
@@ -752,8 +1055,8 @@ arbiter4 #() west_arbiter
     .inC_ack    (ack_northeast_west),
     
     .inD_req    (req_local_W),
-    .inD_data   (ack_local_W),
-    .inD_ack    (data_local_W),
+    .inD_data   (data_local_W),
+    .inD_ack    (ack_local_W),
     
     .out_req    (portW_output.req),
     .out_data   (portW_output.data),
@@ -829,7 +1132,7 @@ arbiter #() northwest_arbiter
     .inB_req    (req_local_NW),
     .inB_data   (data_local_NW),
     .inB_ack    (ack_local_NW),
-    ,
+    
     
     .out_req    (portNW_output.req),
     .out_data   (portNW_output.data),
@@ -840,49 +1143,100 @@ arbiter #() northwest_arbiter
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
-click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) clickNE
-    (
-    .in_ack         (portNE_input.ack),
-    .in_req         (portNE_input.req),
-    .in_data        (portNE_input.data),
+//Signals from Northeast output
+logic req_southwest_northeast;
+logic ack_southwest_northeast;
+logic [n-1:0] data_southwest_northeast;
 
-    .out_req        (req_NE),
-    .out_ack        (ack_NE),
-    .out_data       (data_NE)
 
-);
-click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) clickSW
-    (
-    .in_ack         (portSW_input.ack),
-    .in_req         (portSW_input.req),
-    .in_data        (portSW_input.data),
+logic req_local_NE;
+logic ack_local_NE;
+logic [n-1:0] data_local_NE;
 
-    .out_req        (req_SW),
-    .out_ack        (ack_SW),
-    .out_data       (data_SW)
-
-);
-click_element #(
-    .DATA_WIDTH     (n),
-    .VALUE          (0),
-    .PHASE_INIT     (1'b0)) clickSE
-    (
-    .in_ack         (portSE_input.ack),
-    .in_req         (portSE_input.req),
-    .in_data        (portSE_input.data),
-
-    .out_req        (req_SE),
-    .out_ack        (ack_SE),
-    .out_data       (data_SE)
-
+arbiter #() northeast_arbiter
+(
+    .rst    (rst),
+    
+    .inA_req    (req_southwest_northeast),
+    .inA_data   (data_southwest_northeast),
+    .inA_ack    (ack_southwest_northeast),
+    
+    .inB_req    (req_local_NE),
+    .inB_data   (data_local_NE),
+    .inB_ack    (ack_local_NE),
+    
+    
+    .out_req    (portNE_output.req),
+    .out_data   (portNE_output.data),
+    .out_ack    (portNE_output.ack)
 );
 
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//Signals from Soutwest output
+logic req_northeast_southwest;
+logic ack_northeast_southwest;
+logic [n-1:0] data_northeast_southwest;
+
+
+logic req_local_SW;
+logic ack_local_SW;
+logic [n-1:0] data_local_SW;
+
+arbiter #() southwest_arbiter
+(
+    .rst    (rst),
+    
+    .inA_req    (req_northeast_southwest),
+    .inA_data   (data_northeast_southwest),
+    .inA_ack    (ack_northeast_southwest),
+    
+    .inB_req    (req_local_SW),
+    .inB_data   (data_local_SW),
+    .inB_ack    (ack_local_SW),
+    
+    
+    .out_req    (portSW_output.req),
+    .out_data   (portSW_output.data),
+    .out_ack    (portSW_output.ack)
+);
+
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
+//Signals from Southeast output
+logic req_northwest_southeast;
+logic ack_northwest_southeast;
+logic [n-1:0] data_northwest_southeast;
+
+
+logic req_local_SE;
+logic ack_local_SE;
+logic [n-1:0] data_local_SE;
+
+arbiter #() southeast_arbiter
+(
+    .rst    (rst),
+    
+    .inA_req    (req_northwest_southeast),
+    .inA_data   (data_northwest_southeast),
+    .inA_ack    (ack_northwest_southeast),
+    
+    .inB_req    (req_local_SE),
+    .inB_data   (data_local_SE),
+    .inB_ack    (ack_local_SE),
+    
+    
+    .out_req    (portSE_output.req),
+    .out_data   (portSE_output.data),
+    .out_ack    (portSE_output.ack)
+);
+
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 click_element #(
     .DATA_WIDTH     (n),
     .VALUE          (0),
@@ -899,7 +1253,7 @@ click_element #(
 
 
 
-router_block4 #(
+router_block8 #(
 
     .rtype      (rtype),
     .maxx      (maxx),
@@ -916,22 +1270,17 @@ router_block4 #(
     .dx         (delta_x),
     .dy         (delta_y),
     .toDemux    (toDemux)
-
-   // .outputWE        (req_self1),
-   // .outputNS       (req_self2),
-   // .outputDiag        (req_self3),
-   // .outputSelf        (req_selfself)
     
 );
 
 delay_element #(
-    .size   (10)
+    .size   (20)
 ) delayReqLocaltoOther(
     .d      (fork_to_sel_req),
     .z      (sel_req_delay_o)
 );
 
-demux4 #() demuxLocaltoOther
+demux8 #() demuxLocaltoOther
 (
     .rst        (rst),
     .inA_req    (fork_to_a_req),
@@ -941,64 +1290,110 @@ demux4 #() demuxLocaltoOther
     .inSel_ack   (fork_to_sel_ack),
     .selector    (toDemux),
 
-    .outB_req    (port1_output.req),
-    .outB_ack    (port1_output.ack),
-    .outB_data   (port1_output.data),
+    .outB_req    (req_local_NE),
+    .outB_ack    (ack_local_NE),
+    .outB_data   (data_local_NE),
 
-    .outC_req    (port2_output.req),
-    .outC_ack    (port2_output.ack),
-    .outC_data   (port2_output.data),
+    .outC_req    (req_local_NW),
+    .outC_ack    (ack_local_NW),
+    .outC_data   (data_local_NW),
 
-    .outD_req    (port3_output.req),
-    .outD_ack    (port3_output.ack),
-    .outD_data   (port3_output.data),
+    .outD_req    (req_local_SE),
+    .outD_ack    (ack_local_SE),
+    .outD_data   (data_local_SE),
 
-    .outE_req    (unused_req),
-    .outE_ack    (unused_ack),
-    .outE_data   (unused_databus)    
+    .outE_req    (req_local_SW),
+    .outE_ack    (ack_local_SW),
+    .outE_data   (data_local_SW),
+
+    .outF_req    (req_local_N),
+    .outF_ack    (ack_local_N),
+    .outF_data   (data_local_N), 
+
+    .outG_req    (req_local_S),
+    .outG_ack    (ack_local_S),
+    .outG_data   (data_local_S), 
+
+    .outH_req    (req_local_E),
+    .outH_ack    (ack_local_E),
+    .outH_data   (data_local_E), 
+
+    .outI_req    (req_local_W),
+    .outI_ack    (ack_local_W),
+    .outI_data   (data_local_W)   
 
 );
 
-//assign grant1 = req_self1;
-//assign grant2 = req_self2;
-//assign grant3 = req_self3;
-
-//assign grant_and1 = {(n){grant1}};
-//assign grant_and2 = {(n){grant2}};
-//assign grant_and3 = {(n){grant2}};
-
-//assign port1_output.data = data_self & grant_and1;
-//assign port1_output.req = grant1;
-
-//assign port2_output.data = data_self & grant_and2;
-//assign port2_output.req = grant2;
-
-//assign port3_output.data = data_self & grant_and3;
-//assign port3_output.req = grant3;
-
-
-//assign ack_proc_click = (grant1 & port1_output.ack) | (grant2 & port2_output.ack) | (grant3 & port3_output.ack);
 
 // Ports to Proc
-arbiter4 #() proc_arbiter
+
+logic req_N_local;
+logic ack_N_local;
+logic [n-1:0] data_N_local;
+
+logic req_S_local;
+logic ack_S_local;
+logic [n-1:0] data_S_local;
+
+logic req_E_local;
+logic ack_E_local;
+logic [n-1:0] data_E_local;
+
+logic req_W_local;
+logic ack_W_local;
+logic [n-1:0] data_W_local;
+
+logic req_NW_local;
+logic ack_NW_local;
+logic [n-1:0] data_NW_local;
+
+logic req_SE_local;
+logic ack_SE_local;
+logic [n-1:0] data_SE_local;
+
+logic req_NE_local;
+logic ack_NE_local;
+logic [n-1:0] data_NE_local;
+
+logic req_SW_local;
+logic ack_SW_local;
+logic [n-1:0] data_SW_local;
+
+arbiter8 #() proc_arbiter
 (
     .rst    (rst),
     
-    .inA_req    (req_1),
-    .inA_data   (data_1),
-    .inA_ack    (ack_1),
+    .inA_req    (req_N_local),
+    .inA_data   (data_N_local),
+    .inA_ack    (ack_N_local),
     
-    .inB_req    (req_2),
-    .inB_data   (data_2),
-    .inB_ack    (ack_2),
+    .inB_req    (req_S_local),
+    .inB_data   (data_S_local),
+    .inB_ack    (ack_S_local),
     
-    .inC_req    (req_3),
-    .inC_data   (data_3),
-    .inC_ack    (ack_3),
+    .inC_req    (req_E_local),
+    .inC_data   (data_E_local),
+    .inC_ack    (ack_E_local),
     
-    .inD_req    (unused_req2),
-    .inD_data   (unused_databus2),
-    .inD_ack    (unused_ack2),
+    .inD_req    (req_W_local),
+    .inD_data   (data_W_local),
+    .inD_ack    (ack_W_local),
+
+    .inE_req    (req_NW_local),
+    .inE_data   (data_NW_local),
+    .inE_ack    (ack_NW_local),
+
+    .inF_req    (req_NE_local),
+    .inF_data   (data_NE_local),
+    .inF_ack    (ack_NE_local),
+
+    .inG_req    (req_SW_local),
+    .inG_data   (data_SW_local),
+    .inG_ack    (ack_SW_local),
+
+    .inH_req    (req_SE_local),
+    .inH_data   (data_SE_local),
+    .inH_ack    (ack_SE_local),
     
     .out_req    (proc_output.req),
     .out_data   (proc_output.data),

@@ -63,8 +63,12 @@ interface RTPort #(parameter WIDTH = 32);
         input ack
     );
 
-    // Assignments to actual signals
-    //assign ack = ack;
-    //assign req = req;
-    //assign data = data;
+    assign ack = ack;
+    assign req = req;
+    assign data = data;
+    
 endinterface; //inputPort
+
+
+// Assignments to actual signals
+    
