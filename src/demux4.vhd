@@ -61,7 +61,7 @@ entity demux4 is
     );
 end demux4;
 architecture Behavioral of demux4 is
-    component demux is
+    component reg_demux is
       port(
         rst           : in  std_logic;
         -- Input port
@@ -109,7 +109,7 @@ architecture Behavioral of demux4 is
 begin
     inA_ack<= D0_ack;
     inSel_ack <= D0S_ack;
-    Demux_0 : demux port map(rst,
+    Demux_0 : reg_demux port map(rst,
         inA_req ,
         inA_data ,
         D0_ack,
@@ -122,7 +122,7 @@ begin
         D2_req,
         D2_data,
         D2_ack);
-    Demux_1 : demux port map(rst=>rst,
+    Demux_1 : reg_demux port map(rst=>rst,
          inA_req => D1_req ,
          inA_data => D1_data ,
          inA_ack => D1_ack,
@@ -134,9 +134,9 @@ begin
          outB_ack => B_ack_out,
          outC_req => C_req_out,
          outC_data => C_data_out,
-         outC_ack => B_ack_out);
+         outC_ack => C_ack_out);
                          
-    Demux_2 : demux port map(rst=>rst,
+    Demux_2 : reg_demux port map(rst=>rst,
          inA_req => D2_req ,
          inA_data => D2_data ,
          inA_ack => D2_ack,
@@ -150,7 +150,7 @@ begin
          outC_data => E_data_out,
          outC_ack => E_ack_out);
                          
-    Demux_S0 :demux port map(rst=>rst,
+    Demux_S0 :reg_demux port map(rst=>rst,
          inA_req => DS0_req ,
          inA_data => crap,
          inA_ack => DS0_ack,
@@ -165,7 +165,7 @@ begin
          outC_ack => D2S_ack);
     Fork_0 : reg_fork generic map(2) port map(
         rst=>rst,
-        inA_req => inA_req,
+        inA_req => inSel_req,
         inA_data => selector,
         inA_ack => inA_ack_un,
         outB_req => D0S_req,
@@ -178,5 +178,17 @@ begin
     crap(1 downto 0) <= DS0_selector;
     D1S_data <= crap2(0);
     D2S_data <= crap3(0);
+    outB_req <= B_req_out;
+    outB_data <= B_data_out;
+    B_ack_out <= outB_ack;
+    outC_req <= C_req_out;
+    outC_data <= C_data_out;
+    C_ack_out <= outC_ack;
+    outD_req <= D_req_out;
+    outD_data <= D_data_out;
+    D_ack_out <= outD_ack;
+    outE_req <= E_req_out;
+    outE_data <= E_data_out;
+    E_ack_out <= outE_ack;
 end Behavioral;
 

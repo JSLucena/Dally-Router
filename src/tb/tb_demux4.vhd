@@ -98,6 +98,8 @@ begin
   begin
   
     -- Put initialisation code here
+    outB_req <= 'L';
+    outB_ack <= 'L';
     rst <= '1';
     inA_data <= X"ffff";
     selector <= "11";
@@ -106,13 +108,24 @@ begin
     wait for 10ns;
     inA_req <= '1';
     inSel_req <= '1';
-    wait for 50 ns;
+    wait for 5 ns;
       inA_req <= '0';
     inSel_req <= '0';
-    wait for 50 ns;
+    wait for 5 ns;
+    inA_req <= '1';
+    inSel_req <= '1';
+    wait until outB_req'event;
+    outB_ack <= outB_req after 5 ns;
+    wait until inA_ack'event;
+    
+    wait for 10 ns;
+    selector <= "10";
+    
     -- Put test bench stimulus code here
 
     wait;
+    
+    
   end process;
 
 

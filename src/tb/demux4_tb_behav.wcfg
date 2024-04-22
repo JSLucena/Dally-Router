@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="demux4_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="defs" />
+            <top_module name="demux4_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="681.293 ns"></ZoomEndTime>
+      <Cursor1Time time="122.844 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="262"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="5" />
+   <wvobject fp_name="group66" type="group">
+      <obj_property name="label">IO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/demux4_tb/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/inA_req" type="logic">
+         <obj_property name="ElementShortName">inA_req</obj_property>
+         <obj_property name="ObjectShortName">inA_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/inA_data" type="array">
+         <obj_property name="ElementShortName">inA_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">inA_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/inA_ack" type="logic">
+         <obj_property name="ElementShortName">inA_ack</obj_property>
+         <obj_property name="ObjectShortName">inA_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/inSel_req" type="logic">
+         <obj_property name="ElementShortName">inSel_req</obj_property>
+         <obj_property name="ObjectShortName">inSel_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/inSel_ack" type="logic">
+         <obj_property name="ElementShortName">inSel_ack</obj_property>
+         <obj_property name="ObjectShortName">inSel_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/selector" type="array">
+         <obj_property name="ElementShortName">selector[1:0]</obj_property>
+         <obj_property name="ObjectShortName">selector[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outB_req" type="logic">
+         <obj_property name="ElementShortName">outB_req</obj_property>
+         <obj_property name="ObjectShortName">outB_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outB_data" type="array">
+         <obj_property name="ElementShortName">outB_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outB_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outB_ack" type="logic">
+         <obj_property name="ElementShortName">outB_ack</obj_property>
+         <obj_property name="ObjectShortName">outB_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outC_req" type="logic">
+         <obj_property name="ElementShortName">outC_req</obj_property>
+         <obj_property name="ObjectShortName">outC_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outC_data" type="array">
+         <obj_property name="ElementShortName">outC_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outC_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outC_ack" type="logic">
+         <obj_property name="ElementShortName">outC_ack</obj_property>
+         <obj_property name="ObjectShortName">outC_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outD_req" type="logic">
+         <obj_property name="ElementShortName">outD_req</obj_property>
+         <obj_property name="ObjectShortName">outD_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outD_data" type="array">
+         <obj_property name="ElementShortName">outD_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outD_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outD_ack" type="logic">
+         <obj_property name="ElementShortName">outD_ack</obj_property>
+         <obj_property name="ObjectShortName">outD_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outE_req" type="logic">
+         <obj_property name="ElementShortName">outE_req</obj_property>
+         <obj_property name="ObjectShortName">outE_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outE_data" type="array">
+         <obj_property name="ElementShortName">outE_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outE_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/outE_ack" type="logic">
+         <obj_property name="ElementShortName">outE_ack</obj_property>
+         <obj_property name="ObjectShortName">outE_ack</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group20" type="group">
+      <obj_property name="label">demux_0/demux4_tb/uut/Demux_0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/inA_req" type="logic">
+         <obj_property name="ElementShortName">inA_req</obj_property>
+         <obj_property name="ObjectShortName">inA_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/inA_data" type="array">
+         <obj_property name="ElementShortName">inA_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">inA_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/inA_ack" type="logic">
+         <obj_property name="ElementShortName">inA_ack</obj_property>
+         <obj_property name="ObjectShortName">inA_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/inSel_req" type="logic">
+         <obj_property name="ElementShortName">inSel_req</obj_property>
+         <obj_property name="ObjectShortName">inSel_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/inSel_ack" type="logic">
+         <obj_property name="ElementShortName">inSel_ack</obj_property>
+         <obj_property name="ObjectShortName">inSel_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/selector" type="logic">
+         <obj_property name="ElementShortName">selector</obj_property>
+         <obj_property name="ObjectShortName">selector</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outB_req" type="logic">
+         <obj_property name="ElementShortName">outB_req</obj_property>
+         <obj_property name="ObjectShortName">outB_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outB_data" type="array">
+         <obj_property name="ElementShortName">outB_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outB_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outB_ack" type="logic">
+         <obj_property name="ElementShortName">outB_ack</obj_property>
+         <obj_property name="ObjectShortName">outB_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outC_req" type="logic">
+         <obj_property name="ElementShortName">outC_req</obj_property>
+         <obj_property name="ObjectShortName">outC_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outC_data" type="array">
+         <obj_property name="ElementShortName">outC_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outC_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outC_ack" type="logic">
+         <obj_property name="ElementShortName">outC_ack</obj_property>
+         <obj_property name="ObjectShortName">outC_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/phase" type="logic">
+         <obj_property name="ElementShortName">phase</obj_property>
+         <obj_property name="ObjectShortName">phase</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/phase_b" type="logic">
+         <obj_property name="ElementShortName">phase_b</obj_property>
+         <obj_property name="ObjectShortName">phase_b</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/phase_c" type="logic">
+         <obj_property name="ElementShortName">phase_c</obj_property>
+         <obj_property name="ObjectShortName">phase_c</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/click" type="logic">
+         <obj_property name="ElementShortName">click</obj_property>
+         <obj_property name="ObjectShortName">click</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/in_token" type="logic">
+         <obj_property name="ElementShortName">in_token</obj_property>
+         <obj_property name="ObjectShortName">in_token</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outB_bubble" type="logic">
+         <obj_property name="ElementShortName">outB_bubble</obj_property>
+         <obj_property name="ObjectShortName">outB_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/outC_bubble" type="logic">
+         <obj_property name="ElementShortName">outC_bubble</obj_property>
+         <obj_property name="ObjectShortName">outC_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/data_reg" type="array">
+         <obj_property name="ElementShortName">data_reg[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_reg[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/b_selected" type="logic">
+         <obj_property name="ElementShortName">b_selected</obj_property>
+         <obj_property name="ObjectShortName">b_selected</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/c_selected" type="logic">
+         <obj_property name="ElementShortName">c_selected</obj_property>
+         <obj_property name="ObjectShortName">c_selected</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/PHASE_INIT" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/PHASE_INIT_B" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_B</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_0/PHASE_INIT_C" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_C</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_C</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group42" type="group">
+      <obj_property name="label">fork</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/inA_req" type="logic">
+         <obj_property name="ElementShortName">inA_req</obj_property>
+         <obj_property name="ObjectShortName">inA_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/inA_data" type="array">
+         <obj_property name="ElementShortName">inA_data[1:0]</obj_property>
+         <obj_property name="ObjectShortName">inA_data[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/inA_ack" type="logic">
+         <obj_property name="ElementShortName">inA_ack</obj_property>
+         <obj_property name="ObjectShortName">inA_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outB_req" type="logic">
+         <obj_property name="ElementShortName">outB_req</obj_property>
+         <obj_property name="ObjectShortName">outB_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outB_data" type="array">
+         <obj_property name="ElementShortName">outB_data[1:0]</obj_property>
+         <obj_property name="ObjectShortName">outB_data[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outB_ack" type="logic">
+         <obj_property name="ElementShortName">outB_ack</obj_property>
+         <obj_property name="ObjectShortName">outB_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outC_req" type="logic">
+         <obj_property name="ElementShortName">outC_req</obj_property>
+         <obj_property name="ObjectShortName">outC_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outC_data" type="array">
+         <obj_property name="ElementShortName">outC_data[1:0]</obj_property>
+         <obj_property name="ObjectShortName">outC_data[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outC_ack" type="logic">
+         <obj_property name="ElementShortName">outC_ack</obj_property>
+         <obj_property name="ObjectShortName">outC_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/click" type="logic">
+         <obj_property name="ElementShortName">click</obj_property>
+         <obj_property name="ObjectShortName">click</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/phase_a" type="logic">
+         <obj_property name="ElementShortName">phase_a</obj_property>
+         <obj_property name="ObjectShortName">phase_a</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/phase_b" type="logic">
+         <obj_property name="ElementShortName">phase_b</obj_property>
+         <obj_property name="ObjectShortName">phase_b</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/phase_c" type="logic">
+         <obj_property name="ElementShortName">phase_c</obj_property>
+         <obj_property name="ObjectShortName">phase_c</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outB_bubble" type="logic">
+         <obj_property name="ElementShortName">outB_bubble</obj_property>
+         <obj_property name="ObjectShortName">outB_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/outC_bubble" type="logic">
+         <obj_property name="ElementShortName">outC_bubble</obj_property>
+         <obj_property name="ObjectShortName">outC_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/inA_token" type="logic">
+         <obj_property name="ElementShortName">inA_token</obj_property>
+         <obj_property name="ObjectShortName">inA_token</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/data_reg" type="array">
+         <obj_property name="ElementShortName">data_reg[1:0]</obj_property>
+         <obj_property name="ObjectShortName">data_reg[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/DATA_WIDTH" type="other">
+         <obj_property name="ElementShortName">DATA_WIDTH</obj_property>
+         <obj_property name="ObjectShortName">DATA_WIDTH</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/VALUE" type="other">
+         <obj_property name="ElementShortName">VALUE</obj_property>
+         <obj_property name="ObjectShortName">VALUE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/PHASE_INIT_A" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_A</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_A</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/PHASE_INIT_B" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_B</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Fork_0/PHASE_INIT_C" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_C</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_C</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group67" type="group">
+      <obj_property name="label">Demux_1</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/inA_req" type="logic">
+         <obj_property name="ElementShortName">inA_req</obj_property>
+         <obj_property name="ObjectShortName">inA_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/inA_data" type="array">
+         <obj_property name="ElementShortName">inA_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">inA_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/inA_ack" type="logic">
+         <obj_property name="ElementShortName">inA_ack</obj_property>
+         <obj_property name="ObjectShortName">inA_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/inSel_req" type="logic">
+         <obj_property name="ElementShortName">inSel_req</obj_property>
+         <obj_property name="ObjectShortName">inSel_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/inSel_ack" type="logic">
+         <obj_property name="ElementShortName">inSel_ack</obj_property>
+         <obj_property name="ObjectShortName">inSel_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/selector" type="logic">
+         <obj_property name="ElementShortName">selector</obj_property>
+         <obj_property name="ObjectShortName">selector</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outB_req" type="logic">
+         <obj_property name="ElementShortName">outB_req</obj_property>
+         <obj_property name="ObjectShortName">outB_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outB_data" type="array">
+         <obj_property name="ElementShortName">outB_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outB_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outB_ack" type="logic">
+         <obj_property name="ElementShortName">outB_ack</obj_property>
+         <obj_property name="ObjectShortName">outB_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outC_req" type="logic">
+         <obj_property name="ElementShortName">outC_req</obj_property>
+         <obj_property name="ObjectShortName">outC_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outC_data" type="array">
+         <obj_property name="ElementShortName">outC_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outC_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outC_ack" type="logic">
+         <obj_property name="ElementShortName">outC_ack</obj_property>
+         <obj_property name="ObjectShortName">outC_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/phase" type="logic">
+         <obj_property name="ElementShortName">phase</obj_property>
+         <obj_property name="ObjectShortName">phase</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/phase_b" type="logic">
+         <obj_property name="ElementShortName">phase_b</obj_property>
+         <obj_property name="ObjectShortName">phase_b</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/phase_c" type="logic">
+         <obj_property name="ElementShortName">phase_c</obj_property>
+         <obj_property name="ObjectShortName">phase_c</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/click" type="logic">
+         <obj_property name="ElementShortName">click</obj_property>
+         <obj_property name="ObjectShortName">click</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/in_token" type="logic">
+         <obj_property name="ElementShortName">in_token</obj_property>
+         <obj_property name="ObjectShortName">in_token</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outB_bubble" type="logic">
+         <obj_property name="ElementShortName">outB_bubble</obj_property>
+         <obj_property name="ObjectShortName">outB_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/outC_bubble" type="logic">
+         <obj_property name="ElementShortName">outC_bubble</obj_property>
+         <obj_property name="ObjectShortName">outC_bubble</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/data_reg" type="array">
+         <obj_property name="ElementShortName">data_reg[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_reg[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/b_selected" type="logic">
+         <obj_property name="ElementShortName">b_selected</obj_property>
+         <obj_property name="ObjectShortName">b_selected</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/c_selected" type="logic">
+         <obj_property name="ElementShortName">c_selected</obj_property>
+         <obj_property name="ObjectShortName">c_selected</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/PHASE_INIT" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/PHASE_INIT_B" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_B</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_1/PHASE_INIT_C" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_C</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_C</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group89" type="group">
+      <obj_property name="label">Demux_2</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/inA_req" type="logic">
+         <obj_property name="ElementShortName">inA_req</obj_property>
+         <obj_property name="ObjectShortName">inA_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/inA_data" type="array">
+         <obj_property name="ElementShortName">inA_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">inA_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/inA_ack" type="logic">
+         <obj_property name="ElementShortName">inA_ack</obj_property>
+         <obj_property name="ObjectShortName">inA_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/inSel_req" type="logic">
+         <obj_property name="ElementShortName">inSel_req</obj_property>
+         <obj_property name="ObjectShortName">inSel_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/inSel_ack" type="logic">
+         <obj_property name="ElementShortName">inSel_ack</obj_property>
+         <obj_property name="ObjectShortName">inSel_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/selector" type="logic">
+         <obj_property name="ElementShortName">selector</obj_property>
+         <obj_property name="ObjectShortName">selector</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outB_req" type="logic">
+         <obj_property name="ElementShortName">outB_req</obj_property>
+         <obj_property name="ObjectShortName">outB_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outB_data" type="array">
+         <obj_property name="ElementShortName">outB_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outB_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outB_ack" type="logic">
+         <obj_property name="ElementShortName">outB_ack</obj_property>
+         <obj_property name="ObjectShortName">outB_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outC_req" type="logic">
+         <obj_property name="ElementShortName">outC_req</obj_property>
+         <obj_property name="ObjectShortName">outC_req</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outC_data" type="array">
+         <obj_property name="ElementShortName">outC_data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">outC_data[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/outC_ack" type="logic">
+         <obj_property name="ElementShortName">outC_ack</obj_property>
+         <obj_property name="ObjectShortName">outC_ack</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/phase_b" type="logic">
+         <obj_property name="ElementShortName">phase_b</obj_property>
+         <obj_property name="ObjectShortName">phase_b</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/phase_c" type="logic">
+         <obj_property name="ElementShortName">phase_c</obj_property>
+         <obj_property name="ObjectShortName">phase_c</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/PHASE_INIT_B" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_B</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/demux4_tb/uut/Demux_2/PHASE_INIT_C" type="logic">
+         <obj_property name="ElementShortName">PHASE_INIT_C</obj_property>
+         <obj_property name="ObjectShortName">PHASE_INIT_C</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
