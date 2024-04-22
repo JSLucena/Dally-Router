@@ -13,8 +13,8 @@ module router_block4
     //input logic req_i,
     input logic [maxx-1:0] dst_x,
     input logic [maxy-1:0] dst_y,
-    input logic dx,
-    input logic dy,
+    //input logic dx,
+    //input logic dy,
 
     output logic [1:0] toDemux
 //

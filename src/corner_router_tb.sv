@@ -111,25 +111,16 @@ always_comb
 
  
 
-logic [1:0] destination = 2'b01;
+logic [1:0] destination = 2'b00;
 logic [1:0] deltas = 2'b0;
 initial begin
     rst = 1'b1;
     #200;
-    repeat (10) begin // Generate 10 cycles of data
+    repeat (4) begin // Generate 10 cycles of data
         rst = 1'b0;
-        #50; // Wait for 10 time units
+        #50; // Wait for 50 time units
         
-        if(destination == 2'b00) begin
-            destination += 1;
-        end
-
-        if(destination[0] > 1'b0) begin
-            deltas[0] = 1'b1;
-        end else begin
-            deltas[0] = 1'b0;
-        end
-
+        
 
         if(destination[1] > 1'b0) begin
             deltas[1] = 1'b1;
@@ -137,14 +128,26 @@ initial begin
             deltas[1] = 1'b0;
         end
 
+
+        if(destination[0] > 1'b0) begin
+            deltas[0] = 1'b1;
+        end else begin
+            deltas[0] = 1'b0;
+        end
+
         // 2 bits of address, destination in this case is x= 0, y = 0.
         // 2 bits to represent destination, x is higher and y is higher
+        destination += 1'b1;
         proc_in.data = {destination,deltas,28'hFFFFFFF}; 
         proc_in.req = ~proc_in.req; // Assert req signal
-        destination += 1'b1;
+        
    
         @(proc_in.ack);
-        
+        /*
+        if(destination == 2'b00) begin
+            destination += 1;
+        end
+        */
     end
 end
 
@@ -156,8 +159,11 @@ initial begin
         port1_in.req = ~port1_in.req ;
         
         @(port1_in.ack);
+        
+        #10;
         port1_in.data = {2'b00,2'b10,28'hAAAAAAA};
         port1_in.req = ~port1_in.req ;
+        @(port1_in.ack);
         
     end
 end
@@ -176,6 +182,18 @@ initial begin
 */
     end
 end
+
+initial begin
+    #200;
+    repeat (2) begin
+        #50;
+        port3_in.data = {2'b00,2'b01,28'hCCCCCCC};
+        port3_in.req = ~port3_in.req;
+        
+         @(port3_in.ack);
+    end
+end
+
 
     always @( proc_out.req) begin
             if(rst == 0) begin
@@ -209,13 +227,14 @@ end
 
 
 
-
+/*
 always @(proc_in.ack) begin
         #10;
         if(rst == 0) begin
         proc_in.req = ~proc_in.req;
         end
     end
+
 
 always @(port1_in.ack) begin
         #10;
@@ -237,7 +256,7 @@ always @(port3_in.ack) begin
         port3_in.req = ~port3_in.req;
         end
     end
-
+*/
 always @( port3_out.req) begin
         $display("Port3 data: %h", port3_out.data);
     end

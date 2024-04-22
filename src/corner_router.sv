@@ -82,10 +82,10 @@ logic [maxy-1:0] dst_y1;
 logic deltax1;
 logic deltay1;
 
-assign dst_y = data_self[n-maxx-2:n-maxx-2-maxy-1];
-assign dst_x = data_self[n-1:n-maxx-1];
-assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+assign dst_y = data_self[n-maxx-1:n-maxx-maxy];
+assign dst_x = data_self[n-1:n-maxx];
+//assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 ///////////////////////////
 
 ///Outputs
@@ -144,8 +144,6 @@ router_block4 #(
 
     .dst_x      (dst_x),
     .dst_y      (dst_y),
-    .dx         (delta_x),
-    .dy         (delta_y),
     .toDemux    (toDemux)
 
     
@@ -157,6 +155,7 @@ delay_element #(
     .d      (fork_to_sel_req),
     .z      (sel_req_delay_o)
 );
+
 
 demux4 #() demuxLocaltoOther
 (
@@ -321,5 +320,10 @@ fork_component #() click_fork
     .outC_req   (fork_to_sel_req)
 
 );
+
+
+
+
+
 
 endmodule
