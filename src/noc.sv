@@ -1,9 +1,9 @@
 module noc2x2
 import router_pkg::*;
 #(
-parameter n = 32,
-parameter n_x = 2,
-parameter n_y= 2
+    parameter integer n = 32,
+    parameter integer n_x = 2,
+    parameter integer n_y= 2
 )(
 
     RTPort.Input proc_in[n_x][n_y],
@@ -29,10 +29,20 @@ parameter n_y= 2
     RTPort port1[n_x][n_y] ();
     RTPort port2[n_x][n_y] ();
     RTPort port3[n_x][n_y] ();
+    
+    /*
 
+    RTPort port1_i[n_x][n_y] ();
+    RTPort port2_i[n_x][n_y] ();
+    RTPort port3_i[n_x][n_y] ();
+    
+    RTPort port1_o[n_x][n_y] ();
+    RTPort port2_o[n_x][n_y] ();
+    RTPort port3_o[n_x][n_y] ();
+*/
   generate
-        for (genvar x = 0; x < n_x; x++) begin : gen_x
-            for (genvar y = 0; y < n_y; y++) begin : gen_y
+        for(genvar x = 0; x < n_x; x++) begin : gen_x
+            for(genvar y = 0; y < n_y; y++) begin : gen_y
                 Corner_Router #(
                // .rtype   (CORNERSW),
                 .n              (n),
@@ -43,8 +53,8 @@ parameter n_y= 2
                 ) node
                 (
                 .rst            (rst),
-                .proc_input     (proc_in[x][y].Input),
-                .proc_output    (proc_out[x][y].Output),
+                .proc_input     (proc_in[x][y]),
+                .proc_output    (proc_out[x][y]),
                 .port1_input    (port1[x][y].Input),
                 .port1_output   (port1[x][y].Output),
                 .port2_output   (port2[x][y].Output),
@@ -60,37 +70,53 @@ parameter n_y= 2
 endgenerate
 
 
-always_comb begin : connections
-   for (int x = 0; x < n_x; x++) begin 
-            for (int y = 0; y < n_y; y++) begin
+assign port1[0][0].Input = port1[1][0].Output;
+assign port2[0][0].Input = port2[0][1].Output;
+assign port3[0][0].Input = port3_in[1][1].Output;
 
-                if (x != n_x -1) begin
-                    port1[x][y].Input = port[x+1][y].Output;
-                end else begin
-                    port1[x][y].Input = port[x-1][y].Output;
-                end
+assign port1[1][0].Input = port1[0][0].Output;
+assign port2[1][0].Input = port2[1][1].Output;
+assign port3[1][0].Input = port3_in[0][1].Output;
 
-                if (y != n_y -1) begin
-                    port2[x][y].Input = port[x][y+1].Output;
-                end else begin
-                    port2[x][y].Input = port[x][y-1].Output;
-                end
+assign port1[0][1].Input = port1[1][1].Output;
+assign port2[0][1].Input = port2[0][0].Output;
+assign port3[0][1].Input = port3_in[1][0].Output;
 
-                if(x == 0 && y == 0) begin
-                    port3[x][y].Input = port[x+1][y+1].Output;
-                end else if(x == n_x-1 && y == n_y - 1) begin
-                    port3[x][y].Input = port[x-1][y-1].Output;
-                end else begin
-                    if (x > y) begin
-                        port3[x][y].Input =  port3[x-1][y+1].Output;
-                    end else begin
-                        port3[x][y].Input =  port3[x+1][y-1].Output;
-                    end
-                end
+assign port1[1][1].Input = port1[0][1].Output;
+assign port2[1][1].Input = port2[1][0].Output;
+assign port3[1][1].Input = port3_in[0][0].Output;
 
-            end
-    end 
-end
+//always_comb begin : connections
+//   for (int x = 0; x < n_x; x++) begin 
+//            for (int y = 0; y < n_y; y++) begin
+//
+//                if (x != n_x -1) begin
+//                    port1[x][y].Input = port1[x+1][y].Output;
+//                end else begin
+//                    port1[x][y].Input = port1[x-1][y].Output;
+//                end
+//
+//                if (y != n_y -1) begin
+//                    port2[x][y].Input = port2[x][y+1].Output;
+//                end else begin
+//                    port2[x][y].Input = port2[x][y-1].Output;
+//                end
+//
+//                if(x == 0 && y == 0) begin
+//                    port3[x][y].Input = port3[x+1][y+1].Output;
+//                end else if(x == n_x-1 && y == n_y - 1) begin
+//                    port3[x][y].Input = port3[x-1][y-1].Output;
+//                end else begin
+//                    if (x > y) begin
+//                        port3[x][y].Input =  port3[x-1][y+1].Output;
+//                    end else begin
+//                        port3[x][y].Input =  port3[x+1][y-1].Output;
+//                    end
+//                end
+//
+//            end
+//    end 
+//end
 
 //    Corner_Router #(
 //    .rtype   (CORNERSW),
