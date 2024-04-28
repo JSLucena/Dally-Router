@@ -78,6 +78,9 @@ logic unused_req2 = 1'b0;
 logic unused_ack2 = 1'b0;
 logic [n-1:0] unused_databus2 =  {(n){1'b0}};
 
+logic self_packet_req;
+logic self_packet_ack;
+logic [n-1:0] self_packet_data;
 
 
 
@@ -131,9 +134,9 @@ demux4 #() demuxLocaltoOther
     .outB_ack    (port3_output.ack),
     .outB_data   (port3_output.data),
 
-    .outE_req    (unused_req),
-    .outE_ack    (unused_ack),
-    .outE_data   (unused_databus)    
+    .outE_req    (self_packet_req),
+    .outE_ack    (self_packet_ack),
+    .outE_data   (self_packet_data)    
 
 );
 
@@ -154,9 +157,9 @@ arbiter4 #() proc_arbiter
     .inC_data   (data_3),
     .inC_ack    (ack_3),
     
-    .inD_req    (unused_req2),
-    .inD_data   (unused_databus2),
-    .inD_ack    (unused_ack2),
+    .inD_req    (self_packet_req),
+    .inD_data   (self_packet_data),
+    .inD_ack    (self_packet_ack),
     
     .out_req    (proc_output.req),
     .out_data   (proc_output.data),
