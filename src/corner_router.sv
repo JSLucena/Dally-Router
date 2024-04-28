@@ -21,49 +21,11 @@ module Corner_Router
     RTPort.Output port2_output,
     RTPort.Input port3_input,
     RTPort.Output port3_output
-  /*  
-    /// Signals between router and cpu
-    input logic [n-1:0] proc_input.data, //OK
-    input logic proc_input.req, //OK
-    output logic proc_input.ack, //OK
-    
-    input logic proc_output.ack, //TODO
-    output logic [n-1:0] proc_output.data, //TODO
-    output logic proc_output.req, //TODO
-    //----------------------------------------
-    
-    input logic [n-1:0] port1_i,
-    input logic port1_input.req, 
-    output logic port1_input.ack, 
-    
-    input logic port1_output.ack, //OK
-    output logic [n-1:0] port1_o,
-    output logic port1_output.req,
-//---------------------------------------------
-    input logic [n-1:0] port2_i,     
-    input logic port2_input.req, 
-    output logic port2_input.ack, 
-    
-    output logic [n-1:0] port2_o, //OK
-    input logic port2_output.ack,
-    output logic port2_output.req, 
-//----------------------------------------------
-    input logic [n-1:0] port3_i, 
-    input logic port3_input.req, 
-    output logic port3_input.ack, 
-    
-    output logic [n-1:0] port3_o, //OK
-    input logic port3_output.ack,
-    output logic port3_output.req
-     */
+
 
 
 );
-//Signals for self router
-//logic req_self1;
-//logic req_self2;
-//logic req_self3;
-//logic req_selfself;
+
 
 logic [1:0] toDemux;
 
@@ -89,14 +51,7 @@ assign dst_x = data_self[n-1:n-maxx];
 ///////////////////////////
 
 ///Outputs
-//logic grant1;
-//logic grant2;
-//logic grant3;
-//logic grant_self;
-//
-//logic [n-1:0] grant_and1;
-//logic [n-1:0] grant_and2;
-//logic [n-1:0] grant_and3;
+
 
 
 //Data from click to router/muxes
@@ -107,9 +62,7 @@ logic [n-1:0] data_3 ;
 
 //Acks from output to clicks
 logic ack_proc_click;
-//logic ack_port1_click;
-//logic ack_port2_click;
-//logic ack_port3_click;
+
 
 //Signals from ports to proc output
 logic req1;
@@ -125,9 +78,7 @@ logic unused_req2 = 1'b0;
 logic unused_ack2 = 1'b0;
 logic [n-1:0] unused_databus2 =  {(n){1'b0}};
 
-//logic out_req;
-//logic out_ack;
-//logic [n-1:0] out_data;
+
 
 
 router_block4 #(
@@ -185,26 +136,6 @@ demux4 #() demuxLocaltoOther
     .outE_data   (unused_databus)    
 
 );
-
-//assign grant1 = req_self1;
-//assign grant2 = req_self2;
-//assign grant3 = req_self3;
-
-//assign grant_and1 = {(n){grant1}};
-//assign grant_and2 = {(n){grant2}};
-//assign grant_and3 = {(n){grant2}};
-
-//assign port1_output.data = data_self & grant_and1;
-//assign port1_output.req = grant1;
-
-//assign port2_output.data = data_self & grant_and2;
-//assign port2_output.req = grant2;
-
-//assign port3_output.data = data_self & grant_and3;
-//assign port3_output.req = grant3;
-
-
-//assign ack_proc_click = (grant1 & port1_output.ack) | (grant2 & port2_output.ack) | (grant3 & port3_output.ack);
 
 // Ports to Proc
 arbiter4 #() proc_arbiter

@@ -1,105 +1,118 @@
-module noc_top
-    import router_pkg::*;
+module noc2x2
+import router_pkg::*;
 #(
-    parameter integer n = 32,
-    parameter integer maxx = 2,
-    parameter integer maxy = 2
-)
-(
+parameter n = 32,
+parameter n_x = 2,
+parameter n_y= 2
+)(
 
-    //Global
-    input logic rst,
-    
-    /// Signals between router and cpu
-    input logic [n-1:0] io_data, //OK
-    input logic io_req, //OK
-    output logic io_ack, //OK
-    
-    input logic ack_proc_self, //TODO
-    output logic [n-1:0] proc_data_o, //TODO
-    output logic req_self_proc, //TODO
-)
+    RTPort.Input proc_in[n_x][n_y],
+    RTPort.Output proc_out[n_x][n_y]
 
-logic ack0001;
-logic ack0010;
-logic ack0011;
-logic ack0110;
-logic ack0111;
-logic ack1011;
-
-logic req0001;
-logic req0010;
-logic req0011;
-logic req0110;
-logic req0111;
-logic req1011;
-
-logic [n-1:0] data0001;
-logic [n-1:0] data0010;
-logic [n-1:0] data0011;
-logic [n-1:0] data0110;
-logic [n-1:0] data0111;
-logic [n-1:0] data1011;
-
-
-Corner_Router #(
-    .router_type    (CORNERSW),
-    .n              (n),
-    .srcx           (0),
-    .srcy           (0),
-    .maxx           (maxx),
-    .maxy           (maxy)
-) SW
-
-(
-    .rst            (rst),
-    .proc_data_i    (io_data),
-    .req_proc_self  (io_req),
-    .ack_self_proc  (io_ack),
-
-
-
-    //Global
-    input logic rst,
-    
-    /// Signals between router and cpu
-    input logic [n-1:0] proc_data_i, //OK
-    input logic req_proc_self, //OK
-    output logic ack_self_proc, //OK
-    
-    input logic ack_proc_self, //TODO
-    output logic [n-1:0] proc_data_o, //TODO
-    output logic req_self_proc, //TODO
-    //----------------------------------------
-    
-    input logic [n-1:0] port1_i,
-    input logic port1_input_req, 
-    output logic port1_input_ack, 
-    
-    input logic port1_output_ack, //OK
-    output logic [n-1:0] port1_o,
-    output logic port1_output_req,
-//---------------------------------------------
-    input logic [n-1:0] port2_i,     
-    input logic port2_input_req, 
-    output logic port2_input_ack, 
-    
-    output logic [n-1:0] port2_o, //OK
-    input logic port2_output_ack,
-    output logic port2_output_req, 
-//----------------------------------------------
-    input logic [n-1:0] port3_i, 
-    input logic port3_input_req, 
-    output logic port3_input_ack, 
-    
-    output logic [n-1:0] port3_o, //OK
-    input logic port3_output_ack,
-    output logic port3_output_req
-)
+);
 
 
 
 
 
+//Global
+    logic rst;
+   // RTPort proc_in ();
+   // RTPort proc_out ();
+  //  RTPort port1_in[n_x][n_y] ();
+  //  RTPort port1_out[n_x][n_y] ();
+  //  RTPort port2_in[n_x][n_y] ();
+  //  RTPort port2_out[n_x][n_y] ();
+  //  RTPort port3_in[n_x][n_y] ();
+  //  RTPort port3_out[n_x][n_y] ();
+
+    RTPort port1[n_x][n_y] ();
+    RTPort port2[n_x][n_y] ();
+    RTPort port3[n_x][n_y] ();
+
+  generate
+        for (genvar x = 0; x < n_x; x++) begin : gen_x
+            for (genvar y = 0; y < n_y; y++) begin : gen_y
+                Corner_Router #(
+               // .rtype   (CORNERSW),
+                .n              (n),
+                .srcx           (x),
+                .srcy           (y),
+                .maxx           (1),
+                .maxy           (1)
+                ) node
+                (
+                .rst            (rst),
+                .proc_input     (proc_in[x][y].Input),
+                .proc_output    (proc_out[x][y].Output),
+                .port1_input    (port1[x][y].Input),
+                .port1_output   (port1[x][y].Output),
+                .port2_output   (port2[x][y].Output),
+                .port2_input    (port2[x][y].Input),
+                .port3_input    (port3[x][y].Input),
+                .port3_output   (port3[x][y].Output)    
+
+
+            );
+            end
+        end
+
+endgenerate
+
+
+always_comb begin : connections
+   for (int x = 0; x < n_x; x++) begin 
+            for (int y = 0; y < n_y; y++) begin
+
+                if (x != n_x -1) begin
+                    port1[x][y].Input = port[x+1][y].Output;
+                end else begin
+                    port1[x][y].Input = port[x-1][y].Output;
+                end
+
+                if (y != n_y -1) begin
+                    port2[x][y].Input = port[x][y+1].Output;
+                end else begin
+                    port2[x][y].Input = port[x][y-1].Output;
+                end
+
+                if(x == 0 && y == 0) begin
+                    port3[x][y].Input = port[x+1][y+1].Output;
+                end else if(x == n_x-1 && y == n_y - 1) begin
+                    port3[x][y].Input = port[x-1][y-1].Output;
+                end else begin
+                    if (x > y) begin
+                        port3[x][y].Input =  port3[x-1][y+1].Output;
+                    end else begin
+                        port3[x][y].Input =  port3[x+1][y-1].Output;
+                    end
+                end
+
+            end
+    end 
+end
+
+//    Corner_Router #(
+//    .rtype   (CORNERSW),
+//    .n              (n),
+//    .srcx           (0),
+//    .srcy           (0),
+//    .maxx           (1),
+//    .maxy           (1)
+//    ) corner00
+//
+//(
+//    .rst            (rst),
+//    .proc_input     (proc_in.Input),
+//    .proc_output    (proc_out.Output),
+//    .port1_input    (port1_in.Input),
+//    .port1_output   (port1_out.Output),
+//    .port2_output   (port2_out.Output),
+//    .port2_input    (port2_in.Input),
+//    .port3_input    (port3_in.Input),
+//    .port3_output   (port3_out.Output)    
+//
+//
+//);
 
 endmodule

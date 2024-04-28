@@ -10,39 +10,6 @@ parameter n = 32
 
 //Global
     logic rst;
-    
-    /// Signals between router and cpu
-    logic [n-1:0] proc_data_i; //OK
-    logic req_proc_self; //OK
-    logic ack_self_proc; //OK
-    
-    logic ack_proc_self; //TODO
-    logic [n-1:0] proc_data_o; //TODO
-    logic req_self_proc; //TODO
-    //------------------------------------
-    
-    logic [n-1:0] port1_i;
-    logic port1_input_req;
-    logic port1_input_ack;
-    logic port1_output_ack; //OK
-    logic [n-1:0] port1_o;
-    logic port1_output_req;
-//---------------------------------------------
-    logic [n-1:0] port2_i;     
-    logic port2_input_req; 
-    logic port2_input_ack; 
-    
-    logic [n-1:0] port2_o;//OK
-    logic port2_output_ack;
-    logic port2_output_req; 
-//----------------------------------------
-    logic [n-1:0] port3_i; 
-    logic port3_input_req; 
-    logic port3_input_ack; 
-    logic [n-1:0] port3_o; //OK
-    logic port3_output_ack;
-    logic port3_output_req;
-
     RTPort proc_in ();
     RTPort proc_out ();
     RTPort port1_in ();
