@@ -54,7 +54,7 @@ click_element #(
 );
 
 
-reg_fork #() click_fork
+fork_component #() click_fork
 (
     .rst        (rst),
     .inA_ack    (ack_click_fork),
