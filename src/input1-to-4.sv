@@ -38,6 +38,8 @@ assign dst_x = data_click_fork[n-1:n-maxx];
 
 logic delay_req_select;
 
+logic test = 1'b0;
+
 
 click_element #(
     .DATA_WIDTH     (n)
@@ -54,7 +56,7 @@ click_element #(
 );
 
 
-fork_component #() click_fork
+reg_fork #() click_fork
 (
     .rst        (rst),
     .inA_ack    (ack_click_fork),
@@ -98,8 +100,8 @@ delay_element #(
 demux4 #() demuxLocaltoOther
 (
     .rst        (rst),
-    .inA_req    (req_click_fork),
-    .inA_ack    (ack_click_fork),
+    .inA_req    (req_fork_demux),
+    .inA_ack    (ack_fork_demux),
     .inA_data   (data_click_fork),
 
     .inSel_req   (delay_req_select),

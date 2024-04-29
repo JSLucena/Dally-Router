@@ -87,7 +87,11 @@ assign self_loopback_data = self_loopback.data;
 //assign port1_output = outs[0].Output;
 //assign port2_output = outs[1].Output;
 //assign port3_output = outs[2].Output;
-
+/*
+assign self_loopback.ack = proc_output.ack;
+assign self_loopback.req = proc_output.req;
+assign self_loopback.data = proc_output.data;
+*/
 assign dst_y = data_self[n-maxx-1:n-maxx-maxy];
 assign dst_x = data_self[n-1:n-maxx];
 
@@ -179,9 +183,9 @@ arbiter4 #() proc_arbiter
     .inC_data   (data_3),
     .inC_ack    (ack_3),
     
-    .inD_req    (self_loopback_req),
-    .inD_data   (self_loopback_data),
-    .inD_ack    (self_loopback_ack),
+    .inD_req    (self_loopback.req),
+    .inD_data   (self_loopback.data),
+    .inD_ack    (self_loopback.ack),
     
     .out_req    (proc_output.req),
     .out_data   (proc_output.data),
