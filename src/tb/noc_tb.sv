@@ -24,5 +24,21 @@ noc2x2 #(
 
 
 always @(proc_out[0][0].req ) begin
-        $display("Proc[0][0] packet - header: %b, payload: %h", proc_out.data[n-1:n-4],proc_out.data[n-4:0]);
+        $display("Proc[0][0] packet - header: %b, payload: %h", proc_out[0][0].data[n-1:n-4],proc_out[0][0].data[n-4:0]);
+        proc_out[0][0].ack = ~proc_out[0][0].ack;
     end
+always @(proc_out[0][1].req ) begin
+        $display("Proc[0][1] packet - header: %b, payload: %h", proc_out[0][1].data[n-1:n-4],proc_out[0][1].data[n-4:0]);
+        proc_out[0][1].ack = ~proc_out[0][1].ack;
+    end
+always @(proc_out[1][0].req ) begin
+        $display("Proc[1][0] packet - header: %b, payload: %h", proc_out[1][0].data[n-1:n-4],proc_out[1][0].data[n-4:0]);
+        proc_out[1][0].ack = ~proc_out[1][0].ack;
+    end
+always @(proc_out[1][1].req ) begin
+        $display("Proc[1][1] packet - header: %b, payload: %h", proc_out[1][1].data[n-1:n-4],proc_out[1][1].data[n-4:0]);
+        proc_out[1][1].ack = ~proc_out[1][1].ack;
+    end
+
+
+endmodule

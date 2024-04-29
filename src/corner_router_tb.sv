@@ -78,7 +78,7 @@ always_comb
 
  
 
-logic [1:0] destination = 2'b00;
+logic [1:0] destination = 2'b01;
 logic [1:0] deltas = 2'b0;
 logic [27:0] payload = 28'hFFFFFFF;
 initial begin
@@ -112,11 +112,11 @@ initial begin
         payload = payload - 1'b1;
    
         @(proc_in.ack);
-        /*
-        if(destination == 2'b00) begin
+        
+        if(destination == 2'b11) begin
             destination += 1;
         end
-        */
+        
     end
 end
 
