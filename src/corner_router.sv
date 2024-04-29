@@ -75,8 +75,15 @@ logic [n-1:0] unused_databus;
 logic unused_req2 = 1'b0;
 logic unused_ack2 = 1'b0;
 logic [n-1:0] unused_databus2 =  {(n){1'b0}};
-RTPort unused ();
-assign unused.ack = 1'b0;
+RTPort self_loopback ();
+
+logic self_loopback_req;
+logic self_loopback_ack;
+logic [n-1:0] self_loopback_data;
+
+assign self_loopback_req = self_loopback.req;
+assign self_loopback_ack = self_loopback.ack;
+assign self_loopback_data = self_loopback.data;
 //assign port1_output = outs[0].Output;
 //assign port2_output = outs[1].Output;
 //assign port3_output = outs[2].Output;
@@ -94,7 +101,7 @@ input1to4 #(
 (
     .rst    (rst),
     .in     (proc_input),
-    .outs   ({port1_output,port2_output,port3_output, unused.Output})
+    .outs   ({port1_output,port2_output,port3_output, self_loopback.Output})
     
 );
 
@@ -172,9 +179,9 @@ arbiter4 #() proc_arbiter
     .inC_data   (data_3),
     .inC_ack    (ack_3),
     
-    .inD_req    (unused_req2),
-    .inD_data   (unused_databus2),
-    .inD_ack    (unused_ack2),
+    .inD_req    (self_loopback_req),
+    .inD_data   (self_loopback_data),
+    .inD_ack    (self_loopback_ack),
     
     .out_req    (proc_output.req),
     .out_data   (proc_output.data),

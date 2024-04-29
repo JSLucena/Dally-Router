@@ -80,10 +80,11 @@ always_comb
 
 logic [1:0] destination = 2'b00;
 logic [1:0] deltas = 2'b0;
+logic [27:0] payload = 28'hFFFFFFF;
 initial begin
     rst = 1'b1;
     #200;
-    repeat (4) begin // Generate 10 cycles of data
+    repeat (5) begin // Generate 10 cycles of data
         rst = 1'b0;
         #50; // Wait for 50 time units
         
@@ -105,9 +106,10 @@ initial begin
         // 2 bits of address, destination in this case is x= 0, y = 0.
         // 2 bits to represent destination, x is higher and y is higher
         destination += 1'b1;
-        proc_in.data = {destination,deltas,28'hFFFFFFF}; 
+        proc_in.data = {destination,deltas,payload}; 
         proc_in.req = ~proc_in.req; // Assert req signal
         
+        payload = payload - 1'b1;
    
         @(proc_in.ack);
         /*
