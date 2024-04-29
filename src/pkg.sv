@@ -46,7 +46,7 @@ CornerSW:
 endpackage;
 
 
-interface RTPort #(parameter WIDTH = 32);
+interface RTPort #(parameter WIDTH = 512);
     logic req;
     logic ack;
     logic [WIDTH-1:0] data;

@@ -1,32 +1,34 @@
 module corner_tb
 import router_pkg::*;
 #(
-parameter n = 32
+parameter integer n = 32,
+parameter integer X_BITS = 1,
+parameter integer Y_BITS = 1,
+parameter integer packet_size = n + X_BITS + Y_BITS
 )();
-
 
 
 
 
 //Global
     logic rst;
-    RTPort proc_in ();
-    RTPort proc_out ();
-    RTPort port1_in ();
-    RTPort port1_out ();
-    RTPort port2_in ();
-    RTPort port2_out ();
-    RTPort port3_in ();
-    RTPort port3_out ();
+    RTPort#(.WIDTH(packet_size) ) proc_in ();
+    RTPort#(.WIDTH(packet_size) ) proc_out ();
+    RTPort#(.WIDTH(packet_size) ) port1_in ();
+    RTPort#(.WIDTH(packet_size) ) port1_out ();
+    RTPort#(.WIDTH(packet_size) ) port2_in ();
+    RTPort#(.WIDTH(packet_size) ) port2_out ();
+    RTPort#(.WIDTH(packet_size) ) port3_in ();
+    RTPort#(.WIDTH(packet_size) ) port3_out ();
 
 
     Corner_Router #(
     .rtype   (CORNERSW),
-    .n              (n),
+    .n              (packet_size),
     .srcx           (0),
     .srcy           (0),
-    .maxx           (1),
-    .maxy           (1)
+    .maxx           (X_BITS),
+    .maxy           (Y_BITS)
 ) TEST
 
 (
@@ -80,7 +82,7 @@ always_comb
 
 logic [1:0] destination = 2'b01;
 logic [1:0] deltas = 2'b0;
-logic [27:0] payload = 28'hFFFFFFF;
+logic [n-1:0] payload = '1;
 initial begin
     rst = 1'b1;
     #200;
@@ -106,17 +108,17 @@ initial begin
         // 2 bits of address, destination in this case is x= 0, y = 0.
         // 2 bits to represent destination, x is higher and y is higher
         destination += 1'b1;
-        proc_in.data = {destination,deltas,payload}; 
+        proc_in.data = {destination,payload}; 
         proc_in.req = ~proc_in.req; // Assert req signal
         
-        payload = payload - 1'b1;
+        payload = payload + 1'b1;
    
         @(proc_in.ack);
-        
+       /* 
         if(destination == 2'b11) begin
             destination += 1;
         end
-        
+        */
     end
 end
 
@@ -124,13 +126,13 @@ initial begin
     #200;
     repeat (2) begin
         #30;
-        port1_in.data = {2'b00,2'b10,28'hEEEEEEE};
+        port1_in.data = {2'b00,$urandom()};
         port1_in.req = ~port1_in.req ;
         
         @(port1_in.ack);
         
         #10;
-        port1_in.data = {2'b00,2'b10,28'hAAAAAAA};
+        port1_in.data = {2'b00,$urandom()};
         port1_in.req = ~port1_in.req ;
         @(port1_in.ack);
         
@@ -141,7 +143,7 @@ initial begin
     #200;
     repeat (2) begin
         #40;
-        port2_in.data = {2'b00,2'b01,28'hDDDDDDD};
+        port2_in.data = {2'b00,$urandom()};
         port2_in.req = ~port2_in.req;
         
          @(port2_in.ack);
@@ -156,7 +158,7 @@ initial begin
     #200;
     repeat (2) begin
         #50;
-        port3_in.data = {2'b00,2'b01,28'hCCCCCCC};
+        port3_in.data = {2'b00,$urandom()};
         port3_in.req = ~port3_in.req;
         
          @(port3_in.ack);

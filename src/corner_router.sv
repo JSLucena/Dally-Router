@@ -75,7 +75,7 @@ logic [n-1:0] unused_databus;
 logic unused_req2 = 1'b0;
 logic unused_ack2 = 1'b0;
 logic [n-1:0] unused_databus2 =  {(n){1'b0}};
-RTPort self_loopback ();
+RTPort#(.WIDTH (n)) self_loopback ();
 
 logic self_loopback_req;
 logic self_loopback_ack;
@@ -97,6 +97,7 @@ assign dst_x = data_self[n-1:n-maxx];
 
 input1to4 #(
         .rtype      (rtype),
+        .n          (n),
         .maxx      (maxx),
         .maxy      (maxy),
         .srcy     (srcy),
@@ -167,7 +168,7 @@ input1to4 #(
 //);
 //
 //// Ports to Proc
-arbiter4 #() proc_arbiter
+arbiter4 #(n) proc_arbiter
 (
     .rst    (rst),
     
