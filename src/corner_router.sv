@@ -40,12 +40,12 @@ logic sel_req_delay_o;
 // Signals for input 1
 logic [maxx-1:0] dst_x1;
 logic [maxy-1:0] dst_y1;
-logic deltax1;
-logic deltay1;
+//logic deltax1;
+//logic deltay1;
 
 
-//assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-//assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+////assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+////assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 ///////////////////////////
 
 ///Outputs

@@ -1,20 +1,20 @@
 
-module router_block4
+module router_block8
     import router_pkg::*;
 #(
     parameter router_type rtype = CORNERNE,
-    parameter integer maxx = 2,
-    parameter integer selfx = 2,
+    parameter integer maxx = 3,
+    parameter integer selfx = 1,
 
-    parameter integer selfy = 2,
-    parameter integer maxy = 2
+    parameter integer selfy = 1,
+    parameter integer maxy = 3
 )
 (
     //input logic req_i,
     input logic [maxx-1:0] dst_x,
     input logic [maxy-1:0] dst_y,
-    input logic dx,
-    input logic dy,
+   // input logic dx,
+    //input logic dy,
 
     output logic [2:0] toDemux
 //

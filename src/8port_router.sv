@@ -6,8 +6,8 @@ module full_router
     parameter integer n = 32,
     parameter integer srcx = 2,
     parameter integer srcy = 2,
-    parameter integer maxx = 1,
-    parameter integer maxy = 1
+    parameter integer maxx = 3,
+    parameter integer maxy = 3
 )
 (
     //Global
@@ -50,13 +50,13 @@ logic sel_req_delay_o;
 // Signals for input 1
 logic [maxx-1:0] dst_x1;
 logic [maxy-1:0] dst_y1;
-logic deltax1;
-logic deltay1;
+//logic deltax1;
+//logic deltay1;
 
-assign dst_y = data_self[n-maxx-2:n-maxx-2-maxy-1];
-assign dst_x = data_self[n-1:n-maxx-1];
-assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+assign dst_y = data_self[n-maxx-1:n-maxx-maxy];
+assign dst_x = data_self[n-1:n-maxx];
+////assign deltax = data_self[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+////assign deltay = data_self[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 ///////////////////////////
 
 
@@ -89,14 +89,14 @@ logic [n-1:0] data_N;
 
 logic [maxx-1:0] dst_xN;
 logic [maxy-1:0] dst_yN;
-logic deltaxN;
-logic deltayN;
+//logic deltaxN;
+//logic deltayN;
 
 logic to_demux_N;
 assign dst_yN = data_N[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xN = data_N[n-1:n-maxx-1];
-assign deltaxN = data_N[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayN = data_N[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxN = data_N[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayN = data_N[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkN_to_a_req;
 logic forkN_to_a_ack;
@@ -192,14 +192,14 @@ logic [n-1:0] data_S;
 
 logic [maxx-1:0] dst_xS;
 logic [maxy-1:0] dst_yS;
-logic deltaxS;
-logic deltayS;
+//logic deltaxS;
+//logic deltayS;
 
 logic to_demux_S;
 assign dst_yS = data_S[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xS = data_S[n-1:n-maxx-1];
-assign deltaxS = data_S[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayS = data_S[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxS = data_S[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayS = data_S[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkS_to_a_req;
 logic forkS_to_a_ack;
@@ -292,15 +292,15 @@ logic [n-1:0] data_W;
 
 logic [maxx-1:0] dst_xW;
 logic [maxy-1:0] dst_yW;
-logic deltaxW;
-logic deltayW;
+//logic deltaxW;
+//logic deltayW;
 
 logic to_demux_W;
 
 assign dst_yW = data_W[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xW = data_W[n-1:n-maxx-1];
-assign deltaxW = data_W[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayW = data_W[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxW = data_W[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayW = data_W[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkW_to_a_req;
 logic forkW_to_a_ack;
@@ -392,15 +392,15 @@ logic [n-1:0] data_E;
 
 logic [maxx-1:0] dst_xE;
 logic [maxy-1:0] dst_yE;
-logic deltaxE;
-logic deltayE;
+//logic deltaxE;
+//logic deltayE;
 
 logic to_demux_E;
 
 assign dst_yE = data_E[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xE = data_E[n-1:n-maxx-1];
-assign deltaxE = data_E[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayE = data_E[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxE = data_E[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayE = data_E[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkE_to_a_req;
 logic forkE_to_a_ack;
@@ -495,15 +495,15 @@ logic [n-1:0] data_NW;
 
 logic [maxx-1:0] dst_xNW;
 logic [maxy-1:0] dst_yNW;
-logic deltaxNW;
-logic deltayNW;
+//logic deltaxNW;
+//logic deltayNW;
 
 logic [1:0] to_demux_NW;
 
 assign dst_yNW = data_NW[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xNW = data_NW[n-1:n-maxx-1];
-assign deltaxNW = data_NW[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayNW = data_NW[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxNW = data_NW[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayNW = data_NW[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkNW_to_a_req;
 logic forkNW_to_a_ack;
@@ -605,15 +605,15 @@ logic [n-1:0] data_NE;
 
 logic [maxx-1:0] dst_xNE;
 logic [maxy-1:0] dst_yNE;
-logic deltaxNE;
-logic deltayNE;
+//logic deltaxNE;
+//logic deltayNE;
 
 logic [1:0] to_demux_NE;
 
 assign dst_yNE = data_NE[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xNE = data_NE[n-1:n-maxx-1];
-assign deltaxNE = data_NE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltayNE = data_NE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxNE = data_NE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltayNE = data_NE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkNE_to_a_req;
 logic forkNE_to_a_ack;
@@ -714,15 +714,15 @@ logic [n-1:0] data_SW;
 
 logic [maxx-1:0] dst_xSW;
 logic [maxy-1:0] dst_ySW;
-logic deltaxSW;
-logic deltaySW;
+//logic deltaxSW;
+//logic deltaySW;
 
 logic [1:0] to_demux_SW;
 
 assign dst_ySW = data_SW[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xSW = data_SW[n-1:n-maxx-1];
-assign deltaxSW = data_SW[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltaySW = data_SW[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxSW = data_SW[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltaySW = data_SW[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkSW_to_a_req;
 logic forkSW_to_a_ack;
@@ -823,15 +823,15 @@ logic [n-1:0] data_SE;
 
 logic [maxx-1:0] dst_xSE;
 logic [maxy-1:0] dst_ySE;
-logic deltaxSE;
-logic deltaySE;
+//logic deltaxSE;
+//logic deltaySE;
 
 logic [1:0] to_demux_SE;
 
 assign dst_ySE = data_SE[n-maxx-2:n-maxx-2-maxy-1];
 assign dst_xSE = data_SE[n-1:n-maxx-1];
-assign deltaxSE = data_SE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
-assign deltaySE = data_SE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
+//assign deltaxSE = data_SE[n-maxx-2-maxy-2]; //1 if bigger, 0 if smaller
+//assign deltaySE = data_SE[n-maxx-2-maxy-3]; //1 if bigger, 0 if smaller
 
 logic forkSE_to_a_req;
 logic forkSE_to_a_ack;
@@ -948,7 +948,7 @@ logic req_local_N;
 logic ack_local_N;
 logic [n-1:0] data_local_N;
 
-arbiter4 #() north_arbiter
+arbiter4 #(n) north_arbiter
 (
     .rst    (rst),
     
@@ -993,7 +993,7 @@ logic req_local_S;
 logic ack_local_S;
 logic [n-1:0] data_local_S;
 
-arbiter4 #() south_arbiter
+arbiter4 #(n) south_arbiter
 (
     .rst    (rst),
     
@@ -1038,7 +1038,7 @@ logic req_local_W;
 logic ack_local_W;
 logic [n-1:0] data_local_W;
 
-arbiter4 #() west_arbiter
+arbiter4 #(n) west_arbiter
 (
     .rst    (rst),
     
@@ -1083,7 +1083,7 @@ logic req_local_E;
 logic ack_local_E;
 logic [n-1:0] data_local_E;
 
-arbiter4 #() east_arbiter
+arbiter4 #(n) east_arbiter
 (
     .rst    (rst),
     
@@ -1121,7 +1121,7 @@ logic req_local_NW;
 logic ack_local_NW;
 logic [n-1:0] data_local_NW;
 
-arbiter #() northwest_arbiter
+arbiter #(n) northwest_arbiter
 (
     .rst    (rst),
     
@@ -1153,7 +1153,7 @@ logic req_local_NE;
 logic ack_local_NE;
 logic [n-1:0] data_local_NE;
 
-arbiter #() northeast_arbiter
+arbiter #(n) northeast_arbiter
 (
     .rst    (rst),
     
@@ -1184,7 +1184,7 @@ logic req_local_SW;
 logic ack_local_SW;
 logic [n-1:0] data_local_SW;
 
-arbiter #() southwest_arbiter
+arbiter #(n) southwest_arbiter
 (
     .rst    (rst),
     
@@ -1216,7 +1216,7 @@ logic req_local_SE;
 logic ack_local_SE;
 logic [n-1:0] data_local_SE;
 
-arbiter #() southeast_arbiter
+arbiter #(n) southeast_arbiter
 (
     .rst    (rst),
     
@@ -1359,7 +1359,7 @@ logic req_SW_local;
 logic ack_SW_local;
 logic [n-1:0] data_SW_local;
 
-arbiter8 #() proc_arbiter
+arbiter8 #(n) proc_arbiter
 (
     .rst    (rst),
     
