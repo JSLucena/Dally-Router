@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 package defs is
-	constant DATA_WIDTH : Integer := 32;
+	constant DATA_WIDTH : Integer := 36;
 
 	--Delay size
 	constant ADD_DELAY : integer := 15;

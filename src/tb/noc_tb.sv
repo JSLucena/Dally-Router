@@ -1,56 +1,119 @@
 module noc_tb
 import router_pkg::*;
 #(
-    parameter n = 32,
-    parameter integer n_x = 2,
-    parameter integer n_y= 2
+    parameter integer PAYLOAD = 32,
+    parameter integer X_BITS = 1,
+    parameter integer Y_BITS= 1,
+    parameter integer X_CNT = 2,
+    parameter integer Y_CNT = 2,
+    parameter integer packet_size = X_BITS + Y_BITS + 2 + PAYLOAD
 )();
 
 
-logic rst;
-RTPort proc_in[n_x][n_y];
-RTPort proc_out[n_x][n_y];
+    logic rst;
+    logic req_i[X_CNT][Y_CNT];
+    logic ack_i[X_CNT][Y_CNT];
+    logic[packet_size-1:0] data_i[X_CNT][Y_CNT];
+
+    logic req_o[X_CNT][Y_CNT];
+    logic[packet_size-1:0] data_o[X_CNT][Y_CNT];
+    logic ack_o[X_CNT][Y_CNT];
 
 
 noc2x2 #(
-    .n      (n),
-    .n_x    (n_x),
-    .n_y    (n_y)
-)
+    .PAYLOAD      (PAYLOAD),
+    .X_BITS    (X_BITS),
+    .Y_BITS    (Y_BITS),
+    .X_CNT      (X_CNT),
+    .Y_CNT      (Y_CNT),
+    .packet_size (packet_size)
+)test
 (
     .rst        (rst),
-    .proc_in    (proc_in),
-    .proc_out   (proc_out)
+    .req_i    (req_i),
+    .ack_i   (ack_i),
+    .data_i (data_i),
+    .req_o (req_o),
+    .data_o (data_o),
+    .ack_o (ack_o)
 );
 
 always_comb
     if(rst == 1'b1) begin  
-        for(int x = 0; x < n_x; x++) begin 
-            for(int y = 0; y < n_y; y++) begin    
-                proc_in[x][y].ack = 1'b0;
-                proc_in[x][y].req = 1'b0;
-                proc_in[x][y].data = '0;
-                proc_out[x][y].ack = 1'b0;
-                proc_out[x][y].req = 1'b0;
-                proc_out[x][y].data = '0;
+        for(int x = 0; x <= X_BITS; x++) begin 
+            for(int y = 0; y <= Y_BITS; y++) begin    
+                req_i[x][y] = 1'b0;
+                ack_i[x][y] = 1'b0;
+                data_i[x][y] = '0;
+                req_o[x][y] = 1'b0;
+                data_o[x][y] = 1'b0;
+                ack_o[x][y] = '0;
             end
         end
     end
 
-always @(proc_out[0][0].req ) begin
-        $display("Proc[0][0] packet - header: %b, payload: %h", proc_out[0][0].data[n-1:n-4],proc_out[0][0].data[n-4:0]);
-        proc_out[0][0].ack = ~proc_out[0][0].ack;
+logic [1:0] destination = 2'b01;
+logic [1:0] deltas = 2'b0;
+logic [PAYLOAD-1:0] payload = '1;
+initial begin
+    rst = 1'b1;
+    #200;
+    repeat (4) begin // Generate 10 cycles of data
+        rst = 1'b0;
+        #50; // Wait for 50 time units
+        // 2 bits of address, destination in this case is x= 0, y = 0.
+        // 2 bits to represent destination, x is higher and y is higher
+        
+        data_i[0][0] = {destination,2'b00,payload}; 
+        req_i[0][0] = ~req_i[0][0]; // Assert req signal
+        destination += 1'b1;
+        payload = payload + 1'b1;
+        @(ack_i[0][0]);      
     end
-always @(proc_out[0][1].req ) begin
-        $display("Proc[0][1] packet - header: %b, payload: %h", proc_out[0][1].data[n-1:n-4],proc_out[0][1].data[n-4:0]);
-        proc_out[0][1].ack = ~proc_out[0][1].ack;
+        destination = 2 'b10;
+    repeat (4) begin // Generate 10 cycles of data
+ 
+        data_i[0][1] = {destination,2'b00,payload}; 
+        req_i[0][1] = ~req_i[0][1]; // Assert req signal
+        destination += 1'b1;
+        payload = payload + 1'b1;
+        @(ack_i[0][1]);   
     end
-always @(proc_out[1][0].req ) begin
-        $display("Proc[1][0] packet - header: %b, payload: %h", proc_out[1][0].data[n-1:n-4],proc_out[1][0].data[n-4:0]);
-        proc_out[1][0].ack = ~proc_out[1][0].ack;
+        destination = 2 'b11;
+    repeat (4) begin // Generate 10 cycles of data
+ 
+        data_i[1][0] = {destination,2'b00,payload}; 
+        req_i[1][0] = ~req_i[1][0]; // Assert req signal
+        destination += 1'b1;
+        payload = payload + 1'b1;
+        @(ack_i[1][0]);   
     end
-always @(proc_out[1][1].req ) begin
-        $display("Proc[1][1] packet - header: %b, payload: %h", proc_out[1][1].data[n-1:n-4],proc_out[1][1].data[n-4:0]);
-        proc_out[1][1].ack = ~proc_out[1][1].ack;
+        destination = 2 'b00;
+    repeat (4) begin // Generate 10 cycles of data
+ 
+        data_i[1][1] = {destination,2'b00,payload}; 
+        req_i[1][1] = ~req_i[1][1]; // Assert req signal
+        destination += 1'b1;
+        payload = payload + 1'b1;
+        @(ack_i[1][1]);   
     end
+end
+
+
+always @(req_o[0][0] ) begin
+        $display("Proc[0][0] packet - header: %b, payload: %h", data_i[0][0],data_o[0][0]);
+        ack_o[0][0] = ~ack_o[0][0];
+    end
+always @(req_o[0][1] ) begin
+        $display("Proc[0][1] packet - header: %b, payload: %h", data_i[0][1],data_o[0][1]);
+        ack_o[0][1] = ~ack_o[0][1];
+    end
+always @(req_o[1][0] ) begin
+        $display("Proc[1][0] packet - header: %b, payload: %h", data_i[1][0],data_o[1][0]);
+        ack_o[1][0] = ~ack_o[1][0];
+    end
+always @(req_o[1][1] ) begin
+        $display("Proc[1][1] packet - header: %b, payload: %h", data_i[1][1],data_o[1][1]);
+        ack_o[1][1] = ~ack_o[1][1];
+end
 endmodule
