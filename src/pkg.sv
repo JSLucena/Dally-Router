@@ -43,7 +43,7 @@ CornerSW:
 */
 
 
-endpackage;
+endpackage
 
 
 interface RTPort #(parameter WIDTH = 512);
@@ -67,7 +67,7 @@ interface RTPort #(parameter WIDTH = 512);
     assign req = req;
     assign data = data;
     
-endinterface; //inputPort
+endinterface //inputPort
 
 
 // Assignments to actual signals

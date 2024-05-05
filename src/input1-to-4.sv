@@ -1,3 +1,4 @@
+(* DONT_TOUCH = "yes" *)
 module input1to4
     import router_pkg::*;
 #(
@@ -36,6 +37,8 @@ logic [1:0] toDemux;
 assign dst_y = data_click_fork[n-maxx-1:n-maxx-maxy];
 assign dst_x = data_click_fork[n-1:n-maxx];
 
+
+
 logic delay_req_select;
 
 logic test = 1'b0;
@@ -56,7 +59,7 @@ click_element #(
 );
 
 
-reg_fork #() click_fork
+fork_component #() click_fork
 (
     .rst        (rst),
     .inA_ack    (ack_click_fork),
@@ -108,13 +111,13 @@ demux4 #() demuxLocaltoOther
     .inSel_ack   (ack_fork_selector),
     .selector    (toDemux),
 
-    .outD_req    (outs[0].req),
-    .outD_ack    (outs[0].ack),
-    .outD_data   (outs[0].data),
+    .outC_req    (outs[0].req),
+    .outC_ack    (outs[0].ack),
+    .outC_data   (outs[0].data),
 
-    .outC_req    (outs[1].req),
-    .outC_ack    (outs[1].ack),
-    .outC_data   (outs[1].data),
+    .outD_req    (outs[1].req),
+    .outD_ack    (outs[1].ack),
+    .outD_data   (outs[1].data),
 
     .outB_req    (outs[2].req),
     .outB_ack    (outs[2].ack),

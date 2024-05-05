@@ -83,11 +83,14 @@ always_comb
 logic [1:0] destination = 2'b01;
 logic [1:0] deltas = 2'b0;
 logic [n-1:0] payload = '1;
+
 initial begin
     rst = 1'b1;
     #200;
-    repeat (5) begin // Generate 10 cycles of data
-        rst = 1'b0;
+    rst = 1'b0;
+    
+    repeat (4) begin // Generate 10 cycles of data
+        
         #50; // Wait for 50 time units
         
         
@@ -114,50 +117,46 @@ initial begin
         payload = payload + 1'b1;
    
         @(proc_in.ack);
-       /* 
-        if(destination == 2'b11) begin
-            destination += 1;
-        end
-        */
+
     end
+   
 end
+
 
 initial begin
     #200;
-    repeat (2) begin
+    repeat (1) begin
         #30;
         port1_in.data = {2'b00,$urandom()};
         port1_in.req = ~port1_in.req ;
         
         @(port1_in.ack);
         
-        #10;
-        port1_in.data = {2'b00,$urandom()};
-        port1_in.req = ~port1_in.req ;
-        @(port1_in.ack);
+      //  #10;
+      //  port1_in.data = {2'b00,$urandom()};
+      //  port1_in.req = ~port1_in.req ;
+      //  @(port1_in.ack);
         
     end
 end
 
 initial begin
     #200;
-    repeat (2) begin
-        #40;
+    repeat (1) begin
+        #31;
         port2_in.data = {2'b00,$urandom()};
         port2_in.req = ~port2_in.req;
         
          @(port2_in.ack);
-/*
-        port3_in.data = {2'b00,2'b11,28'hCCCCCCC};
-        port3_in.req = ~port3_in.req;
-*/
+
+
     end
 end
 
 initial begin
     #200;
-    repeat (2) begin
-        #50;
+    repeat (1) begin
+        #32;
         port3_in.data = {2'b00,$urandom()};
         port3_in.req = ~port3_in.req;
         
@@ -229,18 +228,18 @@ always @(port3_in.ack) begin
     end
 */
 always @( port3_out.req) begin
-        $display("Port3 data: %h", port3_out.data);
+         $display("Port3 packet - header: %b, payload: %h", port3_out.data[packet_size-1:packet_size-2],port3_out.data);
     end
 
 always @(port2_out.req) begin
-        $display("Port2 data: %h", port2_out.data);
+         $display("Port2 packet - header: %b, payload: %h", port2_out.data[packet_size-1:packet_size-2],port2_out.data);
     end
 
 always @(port1_out.req) begin
-        $display("Port1 data: %h", port1_out.data);
+         $display("Port1 packet - header: %b, payload: %h", port1_out.data[packet_size-1:packet_size-2],port1_out.data);
     end
 
 always @(proc_out.req ) begin
-        $display("Proc data: %h", proc_out.data);
+        $display("Proc packet - header: %b, payload: %h", proc_out.data[packet_size-1:packet_size-2],proc_out.data);
     end
 endmodule
