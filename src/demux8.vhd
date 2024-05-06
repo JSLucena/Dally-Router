@@ -32,6 +32,17 @@ use work.defs.all;
 --use UNISIM.VComponents.all;
 
 entity demux8 is
+     GENERIC (
+    PHASE_INIT_A : STD_LOGIC := '0';
+    PHASE_INIT_B : STD_LOGIC := '0';
+    PHASE_INIT_C : STD_LOGIC := '0';
+    PHASE_INIT_D : STD_LOGIC := '0';
+    PHASE_INIT_E : STD_LOGIC := '0';
+    PHASE_INIT_F : STD_LOGIC := '0';
+    PHASE_INIT_G : STD_LOGIC := '0';
+    PHASE_INIT_H: STD_LOGIC := '0';
+    PHASE_INIT_I : STD_LOGIC := '0'
+  );
 port(
     rst           : in  std_logic;
     -- Input port
@@ -78,156 +89,98 @@ port(
 end demux8;
 
 architecture Behavioral of demux8 is
-    component demux is
-      port(
-        rst           : in  std_logic;
-        -- Input port
-        inA_req       : in  std_logic;
-        inA_data      : in std_logic_vector(DATA_WIDTH-1 downto 0);
-        inA_ack       : out std_logic;
-        -- Select port 
-        inSel_req     : in  std_logic;
-        inSel_ack     : out std_logic;
-        selector      : in std_logic;
-        -- Output channel 1
-        outB_req      : out std_logic;
-        outB_data     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outB_ack      : in  std_logic;
-        -- Output channel 2
-        outC_req      : out std_logic;
-        outC_data     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outC_ack      : in  std_logic
-        );
-    end component;
-    signal D0_ack,D0S_ack,D1_req,D1S_req,D1_ack,D1S_ack,D2_req,D2S_req,D2_ack,D2S_ack : std_logic;
-    signal D1_data,D2_data,D3_data,D4_data,D5_data,D6_data,B_data_out,C_data_out,D_data_out,E_data_out,F_data_out,G_data_out,H_data_out,I_data_out : std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal D3_req,D3S_req,D3_ack,D3S_ack,D3S_data,D4_req,D4S_req,D4_ack,D4S_ack,D4S_data,D5_req,D5S_req,D5_ack,D5S_ack,D5S_data,D6_req,D6S_req,D6_ack,D6S_ack,D6S_data: std_logic;
-    signal B_req_out,B_ack_out,C_req_out,C_ack_out,D_req_out,D_ack_out,E_req_out,E_ack_out,F_req_out,F_ack_out,G_req_out,G_ack_out,H_req_out,H_ack_out,I_req_out,I_ack_out :std_logic;
-    signal crap,crap2,crap3:std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal D1S_data,D2S_data : std_logic_vector(1 downto 0);
+  SIGNAL phase_a : STD_LOGIC;
+  signal click, in_token, outB_bubble, outC_bubble,outD_bubble,outE_bubble,outF_bubble,outG_bubble,outH_bubble,outI_bubble : std_logic;
+  signal b_selected, c_selected,d_selected,e_selected,f_selected,g_selected,h_selected,i_selected : std_logic;
+  SIGNAL phase_b : STD_LOGIC;
+  SIGNAL phase_c : STD_LOGIC;
+  SIGNAL phase_d : STD_LOGIC;
+  SIGNAL phase_e : STD_LOGIC;
+  SIGNAL phase_f : STD_LOGIC;
+  SIGNAL phase_g : STD_LOGIC;
+  SIGNAL phase_h : STD_LOGIC;
+  SIGNAL phase_i : STD_LOGIC;
+  SIGNAL selectorx : std_logic_vector (7 downto 0); 
+  signal data_reg : std_logic_vector(DATA_WIDTH-1 downto 0);
 begin
-    inA_ack<= D0_ack;
-    Demux_0 : demux port map(rst,inA_req ,inA_data ,D0_ack,inSel_req,D0S_ack,selector(1),D1_req,D1_data,D1_ack,D2_req,D2_data,D2_ack);
-    Demux_1 : demux port map(rst=>rst,
-                         inA_req => D1_req ,
-                         inA_data => D1_data ,
-                         inA_ack => D1_ack,
-                         inSel_req => D1S_req,
-                         inSel_ack => D1S_ack,
-                         selector => D1S_data(1),
-                         outB_req => D3_req,
-                         outB_data => D3_data,
-                         outB_ack => D3_ack,
-                         outC_req => D4_req,
-                         outC_data => D4_data,
-                         outC_ack => D4_ack);
-    Demux_2 : demux port map(rst=>rst,
-                         inA_req => D2_req ,
-                         inA_data => D2_data ,
-                         inA_ack => D2_ack,
-                         inSel_req => D2S_req,
-                         inSel_ack => D2S_ack,
-                         selector => D2S_data(1),
-                         outB_req => D5_req,
-                         outB_data => D5_data,
-                         outB_ack => D5_ack,
-                         outC_req => D6_req,
-                         outC_data => D6_data,
-                         outC_ack => D6_ack);
-    Demux_3 : demux port map(rst=>rst,
-                         inA_req => D3_req ,
-                         inA_data => D3_data ,
-                         inA_ack => D3_ack,
-                         inSel_req => D3S_req,
-                         inSel_ack => D3S_ack,
-                         selector => D3S_data,
-                         outB_req => B_req_out,
-                         outB_data => B_data_out,
-                         outB_ack => B_ack_out,
-                         outC_req => C_req_out,
-                         outC_data => C_data_out,
-                         outC_ack => C_ack_out);    
-    Demux_4 : demux port map(rst=>rst,
-                         inA_req => D4_req ,
-                         inA_data => D4_data ,
-                         inA_ack => D4_ack,
-                         inSel_req => D4S_req,
-                         inSel_ack => D4S_ack,
-                         selector => D4S_data,
-                         outB_req => D_req_out,
-                         outB_data => D_data_out,
-                         outB_ack => D_ack_out,
-                         outC_req => E_req_out,
-                         outC_data => E_data_out,
-                         outC_ack => E_ack_out);
-    Demux_5 : demux port map(rst=>rst,
-                         inA_req => D5_req ,
-                         inA_data => D5_data ,
-                         inA_ack => D5_ack,
-                         inSel_req => D5S_req,
-                         inSel_ack => D5S_ack,
-                         selector => D5S_data,
-                         outB_req => F_req_out,
-                         outB_data => F_data_out,
-                         outB_ack => F_ack_out,
-                         outC_req => G_req_out,
-                         outC_data => G_data_out,
-                         outC_ack => G_ack_out);       
-    Demux_6 : demux port map(rst=>rst,
-                         inA_req => D5_req ,
-                         inA_data => D5_data ,
-                         inA_ack => D5_ack,
-                         inSel_req => D5S_req,
-                         inSel_ack => D5S_ack,
-                         selector => D5S_data,
-                         outB_req => H_req_out,
-                         outB_data => H_data_out,
-                         outB_ack => H_ack_out,
-                         outC_req => I_req_out,
-                         outC_data => I_data_out,
-                         outC_ack => I_ack_out);                 
-    Demux_S0 :demux port map(rst=>rst,
-                         inA_req => inSel_req ,
-                         inA_data => crap,
-                         inA_ack => inSel_ack,
-                         inSel_req => inSel_req,
-                         inSel_ack => inSel_ack,
-                         selector => selector(2),
-                         outB_req => D1S_req,
-                         outB_data => crap2,
-                         outB_ack => D1S_ack,
-                         outC_req => D2S_req,
-                         outC_data => crap3,
-                         outC_ack => D2S_ack);
-                         
-    Demux_S1 :demux port map(rst=>rst,
-                         inA_req => inSel_req ,
-                         inA_data => crap,
-                         inA_ack => inSel_ack,
-                         inSel_req => inSel_req,
-                         inSel_ack => inSel_ack,
-                         selector => selector(2),
-                         outB_req => D1S_req,
-                         outB_data => crap2,
-                         outB_ack => D1S_ack,
-                         outC_req => D2S_req,
-                         outC_data => crap3,
-                         outC_ack => D2S_ack);
- 
-    Demux_S2 :demux port map(rst=>rst,
-                         inA_req => inSel_req ,
-                         inA_data => crap,
-                         inA_ack => inSel_ack,
-                         inSel_req => inSel_req,
-                         inSel_ack => inSel_ack,
-                         selector => selector(2),
-                         outB_req => D1S_req,
-                         outB_data => crap2,
-                         outB_ack => D1S_ack,
-                         outC_req => D2S_req,
-                         outC_data => crap3,
-                         outC_ack => D2S_ack);                         
-crap(0) <= selector(0);
-D1S_data <= crap2(1 downto 0);
-D2S_data <= crap3(1 downto 0);
+
+   -- Control Path   
+        inSel_ack <= phase_a;
+        inA_ack <= phase_a;
+        outB_req <= phase_b;
+        outB_data <= data_reg;
+        outC_req <= phase_c;
+        outC_data <= data_reg;
+        outD_req <= phase_d;
+        outD_data <= data_reg;
+        outE_req <= phase_e;
+        outE_data <= data_reg;
+        outF_req <= phase_f;
+        outF_data <= data_reg;
+        outG_req <= phase_g;
+        outG_data <= data_reg;
+        outH_req <= phase_h;
+        outH_data <= data_reg;
+        outI_req <= phase_i;
+        outI_data <= data_reg;
+      -- Selector trigger
+      in_token <= (inSel_req and not(phase_a) and inA_req) or (not(inSel_req) and phase_a and not(inA_req)) after ANDOR3_DELAY + NOT1_DELAY;
+    
+      outB_bubble <= phase_b xnor outB_ack after XOR_DELAY + NOT1_DELAY;
+      outC_bubble <= phase_c xnor outC_ack after XOR_DELAY + NOT1_DELAY;
+      outD_bubble <= phase_d xnor outD_ack after XOR_DELAY + NOT1_DELAY;
+      outE_bubble <= phase_e xnor outE_ack after XOR_DELAY + NOT1_DELAY;
+      outF_bubble <= phase_f xnor outF_ack after XOR_DELAY + NOT1_DELAY;
+      outG_bubble <= phase_g xnor outG_ack after XOR_DELAY + NOT1_DELAY;
+      outH_bubble <= phase_h xnor outH_ack after XOR_DELAY + NOT1_DELAY;
+      outI_bubble <= phase_i xnor outI_ack after XOR_DELAY + NOT1_DELAY;
+      
+      -- Select an option
+      b_selected <= outB_bubble and in_token and  (selectorx(7)) after AND3_DELAY;
+      c_selected <= outC_bubble and in_token and  (selectorx(6)) after AND3_DELAY;
+      d_selected <= outD_bubble and in_token and  (selectorx(5)) after AND3_DELAY;
+      e_selected <= outE_bubble and in_token and  (selectorx(4)) after AND3_DELAY;
+      f_selected <= outF_bubble and in_token and  (selectorx(3)) after AND3_DELAY;
+      g_selected <= outG_bubble and in_token and  (selectorx(2)) after AND3_DELAY;
+      h_selected <= outH_bubble and in_token and  (selectorx(1)) after AND3_DELAY;
+      i_selected <= outI_bubble and in_token and  (selectorx(0)) after AND3_DELAY;
+      
+      
+      click <= b_selected or c_selected or d_selected or e_selected or f_selected or g_selected or h_selected or i_selected  after OR2_DELAY;
+    clock_regs : process(click, rst)
+    begin
+      if rst = '1' then
+        phase_a <= PHASE_INIT_A;
+        phase_b <= PHASE_INIT_B;
+        phase_c <= PHASE_INIT_C;
+        phase_d <= PHASE_INIT_D;
+        phase_e <= PHASE_INIT_E;
+        phase_f <= PHASE_INIT_F;
+        phase_g <= PHASE_INIT_G;
+        phase_h <= PHASE_INIT_H;
+        phase_i <= PHASE_INIT_I;
+        data_reg <= (others => '0');
+      elsif rising_edge(click) then
+        phase_a <= not phase_a after REG_CQ_DELAY;
+        phase_b <= phase_b xor  (selectorx(7)) after REG_CQ_DELAY;
+        phase_c <= phase_c xor (selectorx(6)) after REG_CQ_DELAY;
+        phase_d <= phase_d xor  (selectorx(5)) after REG_CQ_DELAY;
+        phase_e <= phase_e xor (selectorx(4)) after REG_CQ_DELAY;
+        phase_f <= phase_f xor  (selectorx(3)) after REG_CQ_DELAY;
+        phase_g <= phase_g xor (selectorx(2)) after REG_CQ_DELAY;
+        phase_h <= phase_h xor  (selectorx(1)) after REG_CQ_DELAY;
+        phase_i <= phase_i xor (selectorx(0)) after REG_CQ_DELAY;
+        data_reg <= inA_data after REG_CQ_DELAY;
+      end if;
+    end process clock_regs;
+     
+   selectorx <= "00000001" when selector = "000" else 
+	 "00000010" when selector = "001" else 
+	 "00000100" when selector = "010" else 
+	 "00001000" when selector = "011" else 
+	 "00010000" when selector = "100" else 
+	 "00100000" when selector = "101" else 
+	 "01000000" when selector = "110" else 
+	 "10000000" when selector = "111";
+	     
 end Behavioral;
