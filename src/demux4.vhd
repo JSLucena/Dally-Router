@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 04/08/2024 03:11:40 PM
+-- Create Date: 04/15/2024 12:10:30 PM
 -- Design Name: 
 -- Module Name: demux4 - Behavioral
 -- Project Name: 
@@ -32,7 +32,13 @@ use work.defs.all;
 --use UNISIM.VComponents.all;
 
 entity demux4 is
-  port(
+     GENERIC (
+    PHASE_INIT_A : STD_LOGIC := '0';
+    PHASE_INIT_B : STD_LOGIC := '0';
+    PHASE_INIT_C : STD_LOGIC := '0';
+    PHASE_INIT_D : STD_LOGIC := '0';
+    PHASE_INIT_E : STD_LOGIC := '0'
+  );  port(
     rst           : in  std_logic;
     -- Input port
     inA_req       : in  std_logic;
@@ -60,135 +66,67 @@ entity demux4 is
     outE_ack      : in  std_logic
     );
 end demux4;
+
 architecture Behavioral of demux4 is
-    component reg_demux is
-      port(
-        rst           : in  std_logic;
-        -- Input port
-        inA_req       : in  std_logic;
-        inA_data      : in std_logic_vector(DATA_WIDTH-1 downto 0);
-        inA_ack       : out std_logic;
-        -- Select port 
-        inSel_req     : in  std_logic;
-        inSel_ack     : out std_logic;
-        selector      : in std_logic;
-        -- Output channel 1
-        outB_req      : out std_logic;
-        outB_data     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outB_ack      : in  std_logic;
-        -- Output channel 2
-        outC_req      : out std_logic;
-        outC_data     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outC_ack      : in  std_logic
-        );
-    end component;
-    
-    component reg_fork is
-         generic ( 
-            DATA_WIDTH: natural );
-      Port (
-        rst : in std_logic;
-        --Input channel
-        inA_req     : in std_logic;
-        inA_data    : in std_logic_vector(DATA_WIDTH-1 downto 0);
-        inA_ack     : out std_logic;
-        --Output channel 1
-        outB_req    : out std_logic;
-        outB_data   : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outB_ack    : in std_logic;
-        --Output channel 2
-        outC_req    : out std_logic;
-        outC_data   : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        outC_ack    : in std_logic );
-    end component;
-
-    signal inSel_ack_un,DS0_ack,DS0_req,inA_ack_un,D0_ack,D0S_ack,D0S_req,D1_req,D2_req,D1S_req,D2s_req,D1_ack,D2_ack,D1S_ack,D2s_ack,B_req_out,B_ack_out,C_req_out,C_ack_out,D_req_out,D_ack_out,E_req_out,E_ack_out,D1S_data,D2S_data : std_logic;
-    signal D1_data,D2_data,B_data_out,C_data_out,D_data_out,E_data_out : std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal crap,crap2,crap3:std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal D0S_selector,DS0_selector:std_logic_vector (1 downto 0);
+  SIGNAL phase_a : STD_LOGIC;
+  signal click, in_token, outB_bubble, outC_bubble,outD_bubble,outE_bubble : std_logic;
+  signal b_selected, c_selected,d_selected,e_selected : std_logic;
+  SIGNAL phase_b : STD_LOGIC;
+  SIGNAL phase_c : STD_LOGIC;
+  SIGNAL phase_d : STD_LOGIC;
+  SIGNAL phase_e : STD_LOGIC;
+  SIGNAL selectorx : std_logic_vector (3 downto 0); 
+  signal data_reg : std_logic_vector(DATA_WIDTH-1 downto 0);
 begin
-    inA_ack<= D0_ack;
-    inSel_ack <= D0S_ack;
-    Demux_0 : reg_demux port map(rst,
-        inA_req ,
-        inA_data ,
-        D0_ack,
-        D0S_req,
-        D0S_ack,
-        D0S_selector(1),
-        D1_req,
-        D1_data,
-        D1_ack,
-        D2_req,
-        D2_data,
-        D2_ack);
-    Demux_1 : reg_demux port map(rst=>rst,
-         inA_req => D1_req ,
-         inA_data => D1_data ,
-         inA_ack => D1_ack,
-         inSel_req => D1S_req,
-         inSel_ack => D1S_ack,
-         selector => D1S_data,
-         outB_req => B_req_out,
-         outB_data => B_data_out,
-         outB_ack => B_ack_out,
-         outC_req => C_req_out,
-         outC_data => C_data_out,
-         outC_ack => C_ack_out);
-                         
-    Demux_2 : reg_demux port map(rst=>rst,
-         inA_req => D2_req ,
-         inA_data => D2_data ,
-         inA_ack => D2_ack,
-         inSel_req => D2S_req,
-         inSel_ack => D2S_ack,
-         selector => D2S_data,
-         outB_req => D_req_out,
-         outB_data => D_data_out,
-         outB_ack => D_ack_out,
-         outC_req => E_req_out,
-         outC_data => E_data_out,
-         outC_ack => E_ack_out);
-                         
-    Demux_S0 :reg_demux port map(rst=>rst,
-         inA_req => DS0_req ,
-         inA_data => crap,
-         inA_ack => DS0_ack,
-         inSel_req => DS0_req,
-         inSel_ack =>inSel_ack_un,
-         selector => DS0_selector(1),
-         outB_req => D1S_req,
-         outB_data => crap2,
-         outB_ack => D1S_ack,
-         outC_req => D2S_req,
-         outC_data => crap3,
-         outC_ack => D2S_ack);
-    Fork_0 : reg_fork generic map(2) port map(
-        rst=>rst,
-        inA_req => inSel_req,
-        inA_data => selector,
-        inA_ack => inA_ack_un,
-        outB_req => D0S_req,
-        outB_data => D0S_selector,
-        outB_ack => D0S_ack,
-        outC_req => DS0_req,
-        outC_data => DS0_selector,
-        outC_ack => DS0_ack);
-        
-    crap(1 downto 0) <= DS0_selector;
-    D1S_data <= crap2(0);
-    D2S_data <= crap3(0);
-    outB_req <= B_req_out;
-    outB_data <= B_data_out;
-    B_ack_out <= outB_ack;
-    outC_req <= C_req_out;
-    outC_data <= C_data_out;
-    C_ack_out <= outC_ack;
-    outD_req <= D_req_out;
-    outD_data <= D_data_out;
-    D_ack_out <= outD_ack;
-    outE_req <= E_req_out;
-    outE_data <= E_data_out;
-    E_ack_out <= outE_ack;
-end Behavioral;
 
+   -- Control Path   
+        inSel_ack <= phase_a;
+        inA_ack <= phase_a;
+        outB_req <= phase_b;
+        outB_data <= data_reg;
+        outC_req <= phase_c;
+        outC_data <= data_reg;
+        outD_req <= phase_d;
+        outD_data <= data_reg;
+        outE_req <= phase_e;
+        outE_data <= data_reg;
+      -- Selector trigger
+      in_token <= (inSel_req and not(phase_a) and inA_req) or (not(inSel_req) and phase_a and not(inA_req)) after ANDOR3_DELAY + NOT1_DELAY;
+    
+      outB_bubble <= phase_b xnor outB_ack after XOR_DELAY + NOT1_DELAY;
+      outC_bubble <= phase_c xnor outC_ack after XOR_DELAY + NOT1_DELAY;
+      outD_bubble <= phase_d xnor outD_ack after XOR_DELAY + NOT1_DELAY;
+      outE_bubble <= phase_e xnor outE_ack after XOR_DELAY + NOT1_DELAY;
+      
+      -- Select an option
+      b_selected <= outB_bubble and in_token and  (selectorx(3)) after AND3_DELAY;
+      c_selected <= outC_bubble and in_token and  (selectorx(2)) after AND3_DELAY;
+      d_selected <= outD_bubble and in_token and  (selectorx(1)) after AND3_DELAY;
+      e_selected <= outE_bubble and in_token and  (selectorx(0)) after AND3_DELAY;      
+      
+      click <= b_selected or c_selected or d_selected or e_selected  after OR2_DELAY;
+    clock_regs : process(click, rst)
+    begin
+      if rst = '1' then
+        phase_a <= PHASE_INIT_A;
+        phase_b <= PHASE_INIT_B;
+        phase_c <= PHASE_INIT_C;
+        phase_d <= PHASE_INIT_D;
+        phase_e <= PHASE_INIT_E;
+        data_reg <= (others => '0');
+      elsif rising_edge(click) then
+        phase_a <= not phase_a after REG_CQ_DELAY;
+        phase_b <= phase_b xor  (selectorx(3)) after REG_CQ_DELAY;
+        phase_c <= phase_c xor (selectorx(2)) after REG_CQ_DELAY;
+        phase_d <= phase_d xor  (selectorx(1)) after REG_CQ_DELAY;
+        phase_e <= phase_e xor (selectorx(0)) after REG_CQ_DELAY;
+        data_reg <= inA_data after REG_CQ_DELAY;
+      end if;
+    end process clock_regs;
+     
+   selectorx <= "0001" when selector = "00" else 
+	 "0010" when selector = "01" else 
+	 "0100" when selector = "10" else 
+	 "1000" when selector = "11";
+	     
+end Behavioral;

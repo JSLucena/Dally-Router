@@ -101,7 +101,7 @@ begin
     outB_req <= 'L';
     outB_ack <= 'L';
     rst <= '1';
-    inA_data <= X"ffff";
+    inA_data <= X"fffffffff";
     selector <= "11";
     wait for 10ns;
     rst <= '0';
