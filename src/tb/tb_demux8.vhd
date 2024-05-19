@@ -30,6 +30,7 @@ architecture bench of demux8_tb is
 
   component demux8
        GENERIC (
+       
       PHASE_INIT_A : STD_LOGIC := '0';
       PHASE_INIT_B : STD_LOGIC := '0';
       PHASE_INIT_C : STD_LOGIC := '0';

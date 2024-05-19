@@ -1,8 +1,8 @@
-
+(* DONT_TOUCH = "yes" *)
 module router_block4
     import router_pkg::*;
 #(
-    parameter router_type rtype = CORNERNE,
+   // parameter router_type rtype = CORNERNE,
     parameter integer maxx = 2,
     parameter integer selfx = 2,
 

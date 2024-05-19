@@ -1,7 +1,7 @@
 module Corner_Router
     import router_pkg::*;
 #(
-    parameter router_type rtype = CORNERNE,
+    parameter router_type rtype = CORNER,
     parameter integer n = 32,
     parameter integer srcx = 0,
     parameter integer srcy = 0,
@@ -55,7 +55,7 @@ assign self_loopback_data = self_loopback.data;
 
 
 input1to4 #(
-        .rtype      (rtype),
+       // .rtype      (rtype),
         .n          (n),
         .maxx      (maxx),
         .maxy      (maxy),
@@ -98,8 +98,6 @@ arbiter4 #(n) proc_arbiter
 // Input latches
 click_element #(
     .DATA_WIDTH     (n)
-   // .VALUE          (0),
-  //  .PHASE_INIT     (1'b0)
     ) click1
     (
     .rst            (rst),
@@ -117,8 +115,6 @@ click_element #(
 
 click_element #(
     .DATA_WIDTH     (n)
-  //  .VALUE          (0),
-  //  .PHASE_INIT     (1'b0)
     ) click2
     (
     .rst            (rst),
@@ -133,8 +129,6 @@ click_element #(
 );
 click_element #(
     .DATA_WIDTH     (n)
- //   .VALUE          (0),
- //   .PHASE_INIT     (1'b0)
     ) click3
     (
     .rst            (rst),

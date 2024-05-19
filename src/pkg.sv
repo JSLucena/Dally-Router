@@ -2,16 +2,9 @@ package router_pkg;
 
 typedef enum integer { 
 
-    CORNERNW  = 0,
-    CORNERNE  = 1,
-    CORNERSE  = 2,
-    CORNERSW  = 3,
-    
-    SIDEN    = 4,
-    SIDEE    = 5,
-    SIDES    = 6,
-    SIDEW    = 7,
-    MIDDLE  = 8
+    CORNER = 0,
+    EDGE = 1,
+    MID  = 2
 
 } router_type;
 

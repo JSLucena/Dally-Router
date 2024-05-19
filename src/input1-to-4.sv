@@ -3,10 +3,10 @@ module input1to4
     import router_pkg::*;
 #(
 
-    parameter router_type rtype = CORNERNE,
-    parameter integer n = 32,
-    parameter integer srcx = 2,
-    parameter integer srcy = 2,
+   // parameter router_type rtype = CORNER,
+    parameter integer n = 8,
+    parameter integer srcx = 0,
+    parameter integer srcy = 0,
     parameter integer maxx = 1,
     parameter integer maxy = 1
 )
@@ -75,7 +75,7 @@ fork_component #() click_fork
 
 router_block4 #(
 
-    .rtype      (rtype),
+   // .rtype      (rtype),
     .maxx      (maxx),
     .maxy      (maxy),
     .selfy      (srcy),
@@ -93,7 +93,7 @@ router_block4 #(
 );
 
 delay_element #(
-    .size   (20)
+    .size   (1)
 ) delayReqLocaltoOther(
     .d      (req_fork_selector),
     .z      (delay_req_select)

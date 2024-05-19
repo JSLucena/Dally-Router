@@ -1,7 +1,7 @@
 module noc2x2
 import router_pkg::*;
 #(
-    parameter integer PAYLOAD = 32,
+    parameter integer PAYLOAD = 4,
     parameter integer X_BITS = 1,
     parameter integer Y_BITS= 1,
     parameter integer X_CNT = 2,
@@ -70,8 +70,8 @@ generate
 endgenerate
 
   generate
-        for(genvar x = 0; x < X_CNT; x++) begin : geX_BITS_procs
-            for(genvar y = 0; y < Y_CNT ; y++) begin : geY_BITS_procs
+        for(genvar x = 0; x < X_CNT; x++) begin : X
+            for(genvar y = 0; y < Y_CNT ; y++) begin : Y
                 Corner_Router #(
                // .rtype   (CORNERSW),
                 .n              (packet_size),
